@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace PanicControl;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use VendorName\Skeleton\Commands\SkeletonCommand;
+use PanicControl\Commands\PanicControlCommand;
 
-class SkeletonServiceProvider extends PackageServiceProvider
+class PanicControlServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
@@ -16,10 +16,10 @@ class SkeletonServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package
-            ->name('skeleton')
+            ->name('panic-control-laravel')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_skeleton_table')
-            ->hasCommand(SkeletonCommand::class);
+            ->hasMigration('create_panic-control-laravel_table')
+            ->hasCommand(PanicControlCommand::class);
     }
 }
