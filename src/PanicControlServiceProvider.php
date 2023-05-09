@@ -2,9 +2,9 @@
 
 namespace PanicControl;
 
+use PanicControl\Commands\PanicControlCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use PanicControl\Commands\PanicControlCommand;
 
 class PanicControlServiceProvider extends PackageServiceProvider
 {
