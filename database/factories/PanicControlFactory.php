@@ -3,8 +3,8 @@
 namespace PanicControl\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use PanicControl\Models\PanicControl;
 use Illuminate\Support\Str;
+use PanicControl\Models\PanicControl;
 
 class PanicControlFactory extends Factory
 {
