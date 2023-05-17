@@ -18,8 +18,9 @@ return new class extends Migration
         Schema::create('panic_control', function (Blueprint $table) {
             $table->id();
             $table->string('service');
-            $table->boolean('status')->default(false);
+            $table->string('description');
 
+            $table->boolean('status')->default(false);
             $table->json('config')->nullable()->default(null);
 
             $table->unsignedInteger('category_id')
