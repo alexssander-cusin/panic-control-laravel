@@ -54,7 +54,7 @@ composer test
 
 ## TODO
 
-[ ] Support Panic Control category
+- [ ] Support Panic Control category
 
 ## Changelog
 
