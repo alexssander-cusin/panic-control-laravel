@@ -26,7 +26,7 @@ test('Create a Panic Control by facade', function () {
 });
 
 test('Failed to create Panic with wrong parameters', function (string $test, array $parameters) {
-    if($test == 'service.notUnique') {
+    if ($test == 'service.notUnique') {
         $parameters = PanicControlModel::factory()->make(['service' => $parameters['service']])->toArray();
     }
 
@@ -38,11 +38,11 @@ test('Failed to create Panic with wrong parameters', function (string $test, arr
 
     expect(PanicControlModel::count())->toBe($count);
 })->with([
-    ['service.empty', fn() => PanicControlModel::factory()->make(['service' => ''])->toArray()],
-    ['service.notUnique', fn() => PanicControlModel::factory()->create()->toArray()],
-    ['service.max:259', fn() => PanicControlModel::factory()->make(['service' => 'serviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceservice'])->toArray()],
-    ['description.max:264', fn() => PanicControlModel::factory()->make(['description' => 'descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription'])->toArray()],
-    ['status.string', fn() => PanicControlModel::factory()->make(['status' => 'disabled'])->toArray()],
+    ['service.empty', fn () => PanicControlModel::factory()->make(['service' => ''])->toArray()],
+    ['service.notUnique', fn () => PanicControlModel::factory()->create()->toArray()],
+    ['service.max:259', fn () => PanicControlModel::factory()->make(['service' => 'serviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceservice'])->toArray()],
+    ['description.max:264', fn () => PanicControlModel::factory()->make(['description' => 'descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription'])->toArray()],
+    ['status.string', fn () => PanicControlModel::factory()->make(['status' => 'disabled'])->toArray()],
 ]);
 
 test('update a Panic Control by facade', function () {

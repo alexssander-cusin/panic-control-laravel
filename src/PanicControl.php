@@ -30,7 +30,7 @@ class PanicControl
     {
         $panic = (is_int($panic)) ? PanicControlModel::find($panic) : PanicControlModel::where('service', $panic)->first();
 
-        if(empty($panic)) {
+        if (empty($panic)) {
             Log::error('Panic Control não encontrado.', ['service' => $panic, 'parameters' => $parameters]);
             throw new Exception('Panic Control não encontrado.');
         }
