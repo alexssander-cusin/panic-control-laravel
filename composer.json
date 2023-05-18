@@ -37,7 +37,10 @@
         "psr-4": {
             "PanicControl\\": "src/",
             "PanicControl\\Database\\Factories\\": "database/factories/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

@@ -15,7 +15,12 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('panic_control', function (Blueprint $table) {
+        DB::table('panic_control_categories')->insert([
+            'id' => 1,
+            'name' => 'None',
+        ]);
+
+        Schema::create('panic_controls', function (Blueprint $table) {
             $table->id();
             $table->string('service');
             $table->string('description');
@@ -25,8 +30,7 @@ return new class extends Migration
 
             $table->unsignedInteger('category_id')
                 ->nullable()
-                ->default(null)
-                ->after('status');
+                ->default(null);
             $table->foreign('category_id')->references('id')->on('panic_control_categories');
 
             $table->timestamps();

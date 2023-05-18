@@ -32,12 +32,6 @@ return [
 ];
 ```
 
-<!-- Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="panic-control-laravel-views"
-``` -->
-
 ## Usage
 
 ```php
@@ -50,6 +44,10 @@ echo $panicControl->echoPhrase('Hello, PanicControl!');
 ```bash
 composer test
 ```
+
+## TODO
+
+[ ] Support Panic Control category
 
 ## Changelog
 

@@ -2,6 +2,7 @@
 
 namespace PanicControl;
 
+use PanicControl\Commands\PanicControlCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -17,6 +18,7 @@ class PanicControlServiceProvider extends PackageServiceProvider
         $package
             ->name('panic-control-laravel')
             ->hasConfigFile()
-            ->hasMigration('create_panic_control_table');
+            ->hasMigration('create_panic_control_table')
+            ->hasCommand(PanicControlCommand::class);
     }
 }

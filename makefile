@@ -1,5 +1,5 @@
 pint:
 	php ./vendor/bin/pint
 
-test:
+test: pint
 	composer test

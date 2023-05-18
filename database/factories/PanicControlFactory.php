@@ -16,7 +16,6 @@ class PanicControlFactory extends Factory
             'service' => Str::snake($this->faker->name),
             'description' => $this->faker->text,
             'status' => $this->faker->boolean(),
-            'category_id' => $this->faker->numberBetween(1, 10), //TODO: create a category factory
         ];
     }
 }

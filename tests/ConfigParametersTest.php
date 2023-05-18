@@ -1,9 +1,9 @@
 <?php
 
-it('status active')->todo();
-it('status desactive')->todo();
-it('route name')->todo();
-it('url path')->todo();
-it('user')->todo();
-it('user group')->todo();
-it('percent access')->todo();
+test('status active')->todo();
+test('status desactive')->todo();
+test('route name')->todo();
+test('url path')->todo();
+test('user')->todo();
+test('user group')->todo();
+test('percent access')->todo();
