@@ -1,10 +1,10 @@
 <?php
 
 use PanicControl\Facades\PanicControl;
-use PanicControl\Models\PanicControl as ModelsPanicControl;
+use PanicControl\Models\PanicControl as PanicControlModel;
 
 test('Create a Panic Control by facade', function () {
-    $count = ModelsPanicControl::count();
+    $count = PanicControlModel::count();
 
     $panic = [
         'service' => 'service',
@@ -22,30 +22,39 @@ test('Create a Panic Control by facade', function () {
 
     $this->assertDatabaseHas('panic_controls', $panic);
 
-    expect(ModelsPanicControl::count())->toBe($count + 1);
+    expect(PanicControlModel::count())->toBe($count + 1);
 });
 
 test('Failed to create Panic with wrong parameters', function (string $test, array $parameters) {
-    if ($test == 'service.notUnique') {
-        $parameters = ModelsPanicControl::factory()->make(['service' => $parameters['service']])->toArray();
+    if($test == 'service.notUnique') {
+        $parameters = PanicControlModel::factory()->make(['service' => $parameters['service']])->toArray();
     }
 
-    $count = ModelsPanicControl::count();
+    $count = PanicControlModel::count();
 
     expect(fn () => PanicControl::create($parameters))->toThrow(Exception::class);
 
     $this->assertDatabaseMissing('panic_controls', $parameters);
 
-    expect(ModelsPanicControl::count())->toBe($count);
+    expect(PanicControlModel::count())->toBe($count);
 })->with([
-    ['service.empty', fn () => ModelsPanicControl::factory()->make(['service' => ''])->toArray()],
-    ['service.notUnique', fn () => ModelsPanicControl::factory()->create()->toArray()],
-    ['service.max:259', fn () => ModelsPanicControl::factory()->make(['service' => 'serviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceservice'])->toArray()],
-    ['description.max:264', fn () => ModelsPanicControl::factory()->make(['description' => 'descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription'])->toArray()],
-    ['status.string', fn () => ModelsPanicControl::factory()->make(['status' => 'disabled'])->toArray()],
+    ['service.empty', fn() => PanicControlModel::factory()->make(['service' => ''])->toArray()],
+    ['service.notUnique', fn() => PanicControlModel::factory()->create()->toArray()],
+    ['service.max:259', fn() => PanicControlModel::factory()->make(['service' => 'serviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceservice'])->toArray()],
+    ['description.max:264', fn() => PanicControlModel::factory()->make(['description' => 'descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription'])->toArray()],
+    ['status.string', fn() => PanicControlModel::factory()->make(['status' => 'disabled'])->toArray()],
 ]);
 
-test('update a Panic Control by facade')->todo();
+test('update a Panic Control by facade', function () {
+    $panic = PanicControlModel::factory()->create();
+    $newName = 'service updated';
+
+    $newPanic = PanicControl::update($panic->service, ['service' => $newName]);
+
+    $this->assertDatabaseMissing('panic_controls', ['service' => $panic->service]);
+    $this->assertDatabaseHas('panic_controls', ['service' => $newName]);
+});
+
 test('check status a Panic Control by facade')->todo();
 test('list all Panic Control by facade')->todo();
 test('detail a Panic Control by facade')->todo();
