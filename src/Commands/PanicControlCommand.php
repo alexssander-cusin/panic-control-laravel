@@ -3,7 +3,7 @@
 namespace PanicControl\Commands;
 
 use Illuminate\Console\Command;
-use PanicControl\Models\PanicControl;
+use PanicControl\Models\PanicControl as PanicControlModel;
 
 class PanicControlCommand extends Command
 {
@@ -13,7 +13,7 @@ class PanicControlCommand extends Command
 
     public function handle(): int
     {
-        $panic = PanicControl::where('service', $this->argument('service'))->first();
+        $panic = PanicControlModel::where('service', $this->argument('service'))->first();
 
         if (! $panic) {
             $this->error('Panic Control não encontrado.');

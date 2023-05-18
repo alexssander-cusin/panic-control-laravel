@@ -34,9 +34,16 @@ return [
 
 ## Usage
 
+Create a Panic Control:
+
 ```php
-$panicControl = new PanicControl();
-echo $panicControl->echoPhrase('Hello, PanicControl!');
+use PanicControl\Facades\PanicControl;
+
+PanicControl::create([
+    'service' => 'service-name',
+    'description' => 'Description for Panic Control',
+    'status' => false,
+]);
 ```
 
 ## Testing
