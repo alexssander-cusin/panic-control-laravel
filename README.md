@@ -46,6 +46,26 @@ PanicControl::create([
 ]);
 ```
 
+Update a Panic Control:
+
+```php
+use PanicControl\Facades\PanicControl;
+
+$panic = 'panic-control-name'; //Panic Control Name or ID
+PanicControl::update($panic, [
+    'service' => 'new-panic-name',
+]);
+```
+
+Check a Panic Control:
+
+```php
+use PanicControl\Facades\PanicControl;
+
+$panic = 'panic-control-name'; //Panic Control Name or ID
+PanicControl::update($panic);
+```
+
 ## Testing
 
 ```bash
