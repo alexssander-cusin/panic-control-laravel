@@ -58,6 +58,19 @@ test('update a Panic Control by facade from service name', function ($key, $valu
     ['status', true],
 ]);
 
-test('check status a Panic Control by facade')->todo();
+test('check status a Panic Control by facade', function () {
+    $panic = PanicControlModel::factory()->create([
+        'status' => true,
+    ]);
+
+    expect(PanicControl::check($panic->service))->toBeTrue($panic->status);
+
+    $panic = PanicControlModel::factory()->create([
+        'status' => false,
+    ]);
+
+    expect(PanicControl::check($panic->service))->toBeFalse($panic->status);
+});
+
 test('list all Panic Control by facade')->todo();
 test('detail a Panic Control by facade')->todo();

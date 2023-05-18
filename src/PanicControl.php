@@ -64,4 +64,16 @@ class PanicControl
 
         return $panic;
     }
+
+    public function check(string|int $panic): bool
+    {
+        $panic = (is_int($panic)) ? PanicControlModel::find($panic) : PanicControlModel::where('service', $panic)->first();
+
+        if (empty($panic)) {
+            Log::error('Panic Control não encontrado.', ['service' => $panic]);
+            throw new Exception('Panic Control não encontrado.');
+        }
+
+        return $panic->status;
+    }
 }
