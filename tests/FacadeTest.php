@@ -45,15 +45,18 @@ test('Failed to create Panic with wrong parameters', function (string $test, arr
     ['status.string', fn () => PanicControlModel::factory()->make(['status' => 'disabled'])->toArray()],
 ]);
 
-test('update a Panic Control by facade', function () {
+test('update a Panic Control by facade from service name', function ($key, $value) {
     $panic = PanicControlModel::factory()->create();
-    $newName = 'service updated';
 
-    $newPanic = PanicControl::update($panic->service, ['service' => $newName]);
+    $newPanic = PanicControl::update($panic->service, [$key => $value]);
 
-    $this->assertDatabaseMissing('panic_controls', ['service' => $panic->service]);
-    $this->assertDatabaseHas('panic_controls', ['service' => $newName]);
-});
+    $this->assertDatabaseMissing('panic_controls', $panic->toArray());
+    $this->assertDatabaseHas('panic_controls', $newPanic->only(['service', 'description', 'status']));
+})->with([
+    ['service', 'new service'],
+    ['description', 'new description'],
+    ['status', true],
+]);
 
 test('check status a Panic Control by facade')->todo();
 test('list all Panic Control by facade')->todo();

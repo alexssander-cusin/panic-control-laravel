@@ -35,6 +35,15 @@ class PanicControl
             throw new Exception('Panic Control não encontrado.');
         }
 
+        $parameters = array_merge(
+            $panic->only([
+                'service',
+                'description',
+                'status',
+            ]),
+            $parameters
+        );
+
         $validator = Validator::make($parameters, [
             'service' => [
                 'required',
