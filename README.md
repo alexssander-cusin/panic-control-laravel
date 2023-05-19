@@ -29,6 +29,10 @@ This is the contents of the published config file:
 
 ```php
 return [
+    'cache' => [
+        'name' => 'panic-control',
+        'time' => 60,
+    ],
 ];
 ```
 
