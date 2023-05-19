@@ -13,13 +13,7 @@ class PanicControl
 {
     private static $list = [];
 
-    public function clear()
-    {
-        Cache::forget(config('panic-control.cache.name'));
-        self::$list = [];
-    }
-
-    public function get(string $panic = null): array
+    protected function get(string $panic = null): array
     {
         if (! self::$list) {
             self::$list = Cache::remember(config('panic-control.cache.name'), config('panic-control.cache.time'), function () {
@@ -42,6 +36,11 @@ class PanicControl
     public function all(): array
     {
         return $this->get();
+    }
+
+    public function find(string $panic): array
+    {
+        return $this->get($panic);
     }
 
     public function check(string $panic): bool
@@ -104,5 +103,11 @@ class PanicControl
         $panic->save();
 
         return $panic;
+    }
+
+    public function clear()
+    {
+        Cache::forget(config('panic-control.cache.name'));
+        self::$list = [];
     }
 }

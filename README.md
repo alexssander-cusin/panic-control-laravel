@@ -74,6 +74,14 @@ use PanicControl\Facades\PanicControl;
 PanicControl::all();
 ```
 
+Get a Panic Control:
+
+```php
+use PanicControl\Facades\PanicControl;
+
+PanicControl::find('panic-control-name');
+```
+
 ## Testing
 
 ```bash

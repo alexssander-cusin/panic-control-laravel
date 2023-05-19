@@ -81,5 +81,5 @@ test('list all Panic Control by facade', function () {
 test('detail a Panic Control by facade', function () {
     $panic = PanicControlModel::factory()->create();
 
-    expect(PanicControl::get($panic->service))->toMatchArray($panic->toArray());
+    expect(PanicControl::find($panic->service))->toMatchArray($panic->toArray());
 });
