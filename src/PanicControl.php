@@ -3,6 +3,7 @@
 namespace PanicControl;
 
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -10,6 +11,34 @@ use PanicControl\Models\PanicControl as PanicControlModel;
 
 class PanicControl
 {
+    private static $list = [];
+
+    public function clear()
+    {
+        Cache::forget(config('panic-control.cache.name'));
+        self::$list = [];
+    }
+
+    public function get(string $panic = null): array
+    {
+        if (! self::$list) {
+            self::$list = Cache::remember(config('panic-control.cache.name'), config('panic-control.cache.time'), function () {
+                return PanicControlModel::all()->keyBy('service')->toArray();
+            });
+        }
+
+        if (is_null($panic)) {
+            return self::$list;
+        }
+
+        try {
+            return self::$list[$panic];
+        } catch (\Throwable $th) {
+            Log::error('Panic Control não encontrado.', ['service' => $panic]);
+            throw new Exception('Panic Control não encontrado.');
+        }
+    }
+
     public function create(array $parameters): PanicControlModel
     {
         $validator = Validator::make($parameters, [
@@ -65,15 +94,15 @@ class PanicControl
         return $panic;
     }
 
-    public function check(string|int $panic): bool
+    public function check(string $panic): bool
     {
-        $panic = (is_int($panic)) ? PanicControlModel::find($panic) : PanicControlModel::where('service', $panic)->first();
+        $panic = $this->get($panic);
 
-        if (empty($panic)) {
-            Log::error('Panic Control não encontrado.', ['service' => $panic]);
-            throw new Exception('Panic Control não encontrado.');
-        }
+        return $panic['status'];
+    }
 
-        return $panic->status;
+    public function all(): array
+    {
+        return $this->get();
     }
 }

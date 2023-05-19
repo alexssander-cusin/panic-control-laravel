@@ -72,5 +72,10 @@ test('check status a Panic Control by facade', function () {
     expect(PanicControl::check($panic->service))->toBeFalse($panic->status);
 });
 
-test('list all Panic Control by facade')->todo();
+test('list all Panic Control by facade', function () {
+    $panics = PanicControlModel::factory()->count(3)->create();
+
+    expect(PanicControl::all())->toHaveCount(3);
+});
+
 test('detail a Panic Control by facade')->todo();

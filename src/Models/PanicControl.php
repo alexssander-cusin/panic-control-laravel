@@ -4,6 +4,7 @@ namespace PanicControl\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use PanicControl\Facades\PanicControl as PanicControlFacade;
 
 class PanicControl extends Model
 {
@@ -14,4 +15,11 @@ class PanicControl extends Model
     ];
 
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::saved(function (PanicControl $panic) {
+            PanicControlFacade::clear();
+        });
+    }
 }

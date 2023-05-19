@@ -66,6 +66,14 @@ $panic = 'panic-control-name'; //Panic Control Name or ID
 PanicControl::update($panic);
 ```
 
+Get all Panic Control:
+
+```php
+use PanicControl\Facades\PanicControl;
+
+PanicControl::all();
+```
+
 ## Testing
 
 ```bash
