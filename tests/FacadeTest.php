@@ -42,7 +42,7 @@ test('Failed to create Panic with wrong parameters', function (string $test, arr
     ['service.notUnique', fn () => PanicControlModel::factory()->create()->toArray()],
     ['service.max:259', fn () => PanicControlModel::factory()->make(['service' => 'serviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceservice'])->toArray()],
     ['description.max:264', fn () => PanicControlModel::factory()->make(['description' => 'descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription'])->toArray()],
-    ['status.string', fn () => PanicControlModel::factory()->make(['status' => 'disabled'])->toArray()],
+    ['status.string', ['service' => 'service', 'description' => 'description', 'status' => 'disabled']],
 ]);
 
 test('update a Panic Control by facade from service name', function ($key, $value) {
@@ -78,4 +78,8 @@ test('list all Panic Control by facade', function () {
     expect(PanicControl::all())->toHaveCount(3);
 });
 
-test('detail a Panic Control by facade')->todo();
+test('detail a Panic Control by facade', function () {
+    $panic = PanicControlModel::factory()->create();
+
+    expect(PanicControl::get($panic->service))->toMatchArray($panic->toArray());
+});

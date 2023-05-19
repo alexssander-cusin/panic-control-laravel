@@ -39,6 +39,18 @@ class PanicControl
         }
     }
 
+    public function all(): array
+    {
+        return $this->get();
+    }
+
+    public function check(string $panic): bool
+    {
+        $panic = $this->get($panic);
+
+        return $panic['status'];
+    }
+
     public function create(array $parameters): PanicControlModel
     {
         $validator = Validator::make($parameters, [
@@ -92,17 +104,5 @@ class PanicControl
         $panic->save();
 
         return $panic;
-    }
-
-    public function check(string $panic): bool
-    {
-        $panic = $this->get($panic);
-
-        return $panic['status'];
-    }
-
-    public function all(): array
-    {
-        return $this->get();
     }
 }

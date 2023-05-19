@@ -16,6 +16,10 @@ class PanicControl extends Model
 
     use HasFactory;
 
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+
     protected static function booted(): void
     {
         static::saved(function (PanicControl $panic) {
