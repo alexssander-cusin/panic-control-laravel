@@ -1,4 +1,4 @@
-# This is my package panic-control-laravel
+# Panic Control for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/alexssander-cusin/panic-control-laravel.svg?style=flat-square)](https://packagist.org/packages/alexssander-cusin/panic-control-laravel)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/alexssander-cusin/panic-control-laravel/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/alexssander-cusin/panic-control-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
