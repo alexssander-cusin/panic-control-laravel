@@ -30,7 +30,7 @@ This is the contents of the published config file:
 ```php
 return [
     'cache' => [
-        'store' => env('QUEUE_CONNECTION', 'file'),
+        'store' => env('CACHE_DRIVER', 'file'),
         'key' => 'panic-control',
         'time' => 60,
     ],
@@ -47,7 +47,7 @@ Create a Panic Control:
 use PanicControl\Facades\PanicControl;
 
 PanicControl::create([
-    'service' => 'service-name',
+    'service' => 'panic-control-name',
     'description' => 'Description for Panic Control',
     'status' => false,
 ]);
@@ -60,7 +60,7 @@ use PanicControl\Facades\PanicControl;
 
 $panic = 'panic-control-name'; //Panic Control Name or ID
 PanicControl::update($panic, [
-    'service' => 'new-panic-name',
+    'service' => 'new-panic-control-name',
 ]);
 ```
 
