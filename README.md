@@ -104,6 +104,20 @@ use PanicControl\Facades\PanicControl;
 getPanicControlActive('panic-control-name');
 ```
 
+### Command
+
+List all Panic Control
+
+```bash
+php artisan panic-control:list
+```
+
+Detail a Panic Control
+
+```bash
+php artisan panic-control:show panic-control-name
+```
+
 ## Testing
 
 ```bash

@@ -5,16 +5,10 @@
  */
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 use PanicControl\Models\PanicControl;
 
 test('show all panic control on command', function () {
     $panics = PanicControl::factory()->count(3)->create();
-
-    // $this->withoutMockingConsoleOutput()->artisan('panic-control:list');
-    // $result = Artisan::output();
-
-    // dump($result);
 
     $this->artisan('panic-control:list')
         ->expectsOutputToContain($panics[0]->service)
