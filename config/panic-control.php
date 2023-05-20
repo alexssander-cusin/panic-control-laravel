@@ -3,7 +3,8 @@
 // config for PanicControl/PanicControl
 return [
     'cache' => [
-        'name' => 'panic-control',
+        'store' => env('QUEUE_CONNECTION', 'file'),
+        'key' => 'panic-control',
         'time' => 60,
     ],
 ];

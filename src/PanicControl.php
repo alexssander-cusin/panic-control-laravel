@@ -15,8 +15,9 @@ class PanicControl
 
     protected function get(string $panic = null): array
     {
+        $config = config('panic-control.cache');
         if (! self::$list) {
-            self::$list = Cache::remember(config('panic-control.cache.name'), config('panic-control.cache.time'), function () {
+            self::$list = Cache::store($config['store'])->remember($config['key'], $config['time'], function () {
                 return PanicControlModel::all()->keyBy('service')->toArray();
             });
         }
