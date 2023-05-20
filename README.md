@@ -64,15 +64,6 @@ PanicControl::update($panic, [
 ]);
 ```
 
-Check a Panic Control:
-
-```php
-use PanicControl\Facades\PanicControl;
-
-$panic = 'panic-control-name'; //Panic Control Name or ID
-PanicControl::update($panic);
-```
-
 Get all Panic Control:
 
 ```php
