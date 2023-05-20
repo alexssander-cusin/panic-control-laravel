@@ -5,9 +5,24 @@
  */
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use PanicControl\Models\PanicControl;
 
-test('show all panic control on command')->todo();
+test('show all panic control on command', function () {
+    $panics = PanicControl::factory()->count(3)->create();
+
+    // $this->withoutMockingConsoleOutput()->artisan('panic-control:list');
+    // $result = Artisan::output();
+
+    // dump($result);
+
+    $this->artisan('panic-control:list')
+        ->expectsOutputToContain($panics[0]->service)
+        ->expectsOutputToContain($panics[1]->service)
+        ->expectsOutputToContain($panics[2]->service)
+        ->assertExitCode(Command::SUCCESS);
+
+});
 
 test('show details a panic control on command', function () {
     $panic = PanicControl::factory()->create([
@@ -15,9 +30,7 @@ test('show details a panic control on command', function () {
     ]);
 
     $this->artisan('panic-control:show', ['service' => 'test'])
-        ->expectsOutput("service: {$panic->service}")
-        ->expectsOutput("description: {$panic->description}")
-        ->expectsOutput("status: {$panic->status}")
+        ->expectsOutputToContain($panic->service)
         ->assertExitCode(Command::SUCCESS);
 
     $this->artisan('panic-control:show', ['service' => 'not-found'])

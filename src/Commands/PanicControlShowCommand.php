@@ -5,7 +5,7 @@ namespace PanicControl\Commands;
 use Illuminate\Console\Command;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
-class PanicControlCommand extends Command
+class PanicControlShowCommand extends Command
 {
     public $signature = 'panic-control:show {service}';
 
