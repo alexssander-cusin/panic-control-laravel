@@ -21,6 +21,8 @@ class PanicControlServiceProvider extends PackageServiceProvider
             ->hasCommands([
                 \PanicControl\Commands\PanicControlShowCommand::class,
                 \PanicControl\Commands\PanicControlListCommand::class,
+                \PanicControl\Commands\PanicControlActiveCommand::class,
+                \PanicControl\Commands\PanicControlDesactiveCommand::class,
             ]);
     }
 }

@@ -118,6 +118,18 @@ Detail a Panic Control
 php artisan panic-control:show panic-control-name
 ```
 
+Active a Panic Control
+
+```bash
+php artisan panic-control:active panic-control-name
+```
+
+Desactive a Panic Control
+
+```bash
+php artisan panic-control:desactive panic-control-name
+```
+
 ## Testing
 
 ```bash

@@ -5,10 +5,11 @@
  */
 
 use Illuminate\Console\Command;
-use PanicControl\Models\PanicControl;
+use PanicControl\Facades\PanicControl;
+use PanicControl\Models\PanicControl as PanicControlModel;
 
 test('show all panic control on command', function () {
-    $panics = PanicControl::factory()->count(3)->create();
+    $panics = PanicControlModel::factory()->count(3)->create();
 
     $this->artisan('panic-control:list')
         ->expectsOutputToContain($panics[0]->service)
@@ -19,7 +20,7 @@ test('show all panic control on command', function () {
 });
 
 test('show details a panic control on command', function () {
-    $panic = PanicControl::factory()->create([
+    $panic = PanicControlModel::factory()->create([
         'service' => 'test',
     ]);
 
@@ -32,5 +33,30 @@ test('show details a panic control on command', function () {
         ->assertExitCode(Command::FAILURE);
 });
 
-test('active a panic control on command')->todo();
-test('deactive a panic control on command')->todo();
+test('active a panic control on command', function () {
+    $panic = PanicControlModel::factory()->create([
+        'status' => false,
+    ]);
+
+    expect(PanicControl::check($panic->service))->toBeFalse();
+
+    $this->artisan('panic-control:active', ['service' => $panic->service])
+        ->expectsOutput('Panic Control ativado com sucesso.')
+        ->assertExitCode(Command::SUCCESS);
+
+    expect(PanicControl::check($panic->service))->toBeTrue();
+});
+
+test('deactive a panic control on command', function () {
+    $panic = PanicControlModel::factory()->create([
+        'status' => true,
+    ]);
+
+    expect(PanicControl::check($panic->service))->toBeTrue();
+
+    $this->artisan('panic-control:desactive', ['service' => $panic->service])
+        ->expectsOutput('Panic Control desativado com sucesso.')
+        ->assertExitCode(Command::SUCCESS);
+
+    expect(PanicControl::check($panic->service))->toBeFalse();
+});
