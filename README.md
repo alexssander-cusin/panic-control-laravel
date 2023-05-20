@@ -38,6 +38,8 @@ return [
 
 ## Usage
 
+### Facade
+
 Create a Panic Control:
 
 ```php
@@ -84,6 +86,22 @@ Get a Panic Control:
 use PanicControl\Facades\PanicControl;
 
 PanicControl::find('panic-control-name');
+```
+
+Check if Panic Control is Active
+
+```php
+PanicControl::check('panic-control-name');
+```
+
+### Helper
+
+Check if Panic Control is Active
+
+```php
+use PanicControl\Facades\PanicControl;
+
+getPanicControlActive('panic-control-name');
 ```
 
 ## Testing
