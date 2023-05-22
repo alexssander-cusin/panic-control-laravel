@@ -12,12 +12,14 @@ class PanicControl extends Model
         'service',
         'description',
         'status',
+        'rules',
     ];
 
     use HasFactory;
 
     protected $casts = [
         'status' => 'boolean',
+        'rules' => 'array',
     ];
 
     protected static function booted(): void

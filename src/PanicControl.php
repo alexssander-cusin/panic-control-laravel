@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use PanicControl\Exceptions\PanicControlRuleDoesNotExist;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
 class PanicControl
@@ -48,7 +49,27 @@ class PanicControl
     {
         $panic = $this->get($panic);
 
-        return $panic['status'];
+        $status = $panic['status'];
+
+        if ($status && $panic['rules']) {
+            foreach ($panic['rules'] as $rule => $parameters) {
+                if ($panic === false || empty($parameters)) {
+                    continue;
+                }
+
+                try {
+                    $rule = app(config('panic-control.rules')[$rule])->rule($parameters);
+                } catch (\Throwable $th) {
+                    throw new PanicControlRuleDoesNotExist($rule);
+                }
+
+                if (is_bool($rule)) {
+                    $status = $rule;
+                }
+            }
+        }
+
+        return $status;
     }
 
     public function create(array $parameters): PanicControlModel

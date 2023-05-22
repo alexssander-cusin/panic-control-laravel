@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('description');
 
             $table->boolean('status')->default(false);
-            $table->json('config')->nullable()->default(null);
+            $table->json('rules')->nullable()->default(null);
 
             $table->unsignedInteger('category_id')
                 ->nullable()
