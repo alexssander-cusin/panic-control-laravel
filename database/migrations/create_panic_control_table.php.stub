@@ -22,7 +22,7 @@ return new class extends Migration
 
         Schema::create('panic_controls', function (Blueprint $table) {
             $table->id();
-            $table->string('service');
+            $table->string('name');
             $table->string('description');
 
             $table->boolean('status')->default(false);

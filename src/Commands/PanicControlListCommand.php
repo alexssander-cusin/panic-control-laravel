@@ -14,7 +14,7 @@ class PanicControlListCommand extends Command
 
     public function handle(): int
     {
-        $panic = PanicControlModel::all(['service', 'status', 'description']);
+        $panic = PanicControlModel::all(['name', 'status', 'description']);
 
         if (! $panic) {
             $this->error('Nenhum Panic Control encontrado.');
@@ -22,20 +22,15 @@ class PanicControlListCommand extends Command
             return self::FAILURE;
         }
 
-        // $this->table(
-        //     ['Service', 'Status', 'Description'],
-        //     $panic->toArray()
-        // );
-
         $table = new Table($this->output);
 
         $table->setHeaders([
-            'Service', 'Status', 'Description',
+            'Name', 'Status', 'Description',
         ]);
 
         foreach ($panic as $key => $value) {
             $table->addRow([
-                $value->service,
+                $value->name,
                 $value->status ? '<bg=green>Active</>' : '<bg=red>Inactive</>',
                 $value->description,
             ]);

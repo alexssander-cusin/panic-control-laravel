@@ -13,7 +13,7 @@ test('rule does not exist', function () {
         ],
     ]);
 
-    expect(fn () => PanicControl::check($panic->service))->toThrow(\PanicControl\Exceptions\PanicControlRuleDoesNotExist::class);
+    expect(fn () => PanicControl::check($panic->name))->toThrow(\PanicControl\Exceptions\PanicControlRuleDoesNotExist::class);
 });
 
 test('multi rules', function () {
@@ -32,7 +32,7 @@ test('multi rules', function () {
             ],
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeFalse();
+    expect(PanicControl::check($panic->name))->toBeFalse();
 
     // Rules exists and Panic Control is enabled
     $panic = PanicControlModel::factory()->create([
@@ -46,7 +46,7 @@ test('multi rules', function () {
             ],
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeTrue();
+    expect(PanicControl::check($panic->name))->toBeTrue();
 
     // Rules exists and Panic Control is enabled but one rule is not in the list
     $panic = PanicControlModel::factory()->create([
@@ -60,7 +60,7 @@ test('multi rules', function () {
             ],
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeFalse();
+    expect(PanicControl::check($panic->name))->toBeFalse();
 });
 
 test('rule route name', function () {
@@ -75,7 +75,7 @@ test('rule route name', function () {
             ],
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeFalse();
+    expect(PanicControl::check($panic->name))->toBeFalse();
 
     // Route Name exists and Panic Control is enabled
     $panic = PanicControlModel::factory()->create([
@@ -86,7 +86,7 @@ test('rule route name', function () {
             ],
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeTrue();
+    expect(PanicControl::check($panic->name))->toBeTrue();
 
     // Route Name exists and Panic Control is enabled but the route name is not in the list
     $panic = PanicControlModel::factory()->create([
@@ -97,7 +97,7 @@ test('rule route name', function () {
             ],
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeFalse();
+    expect(PanicControl::check($panic->name))->toBeFalse();
 
     // Panic Control is enabled but the route name set false
     $panic = PanicControlModel::factory()->create([
@@ -106,7 +106,7 @@ test('rule route name', function () {
             'route-name' => false,
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeTrue();
+    expect(PanicControl::check($panic->name))->toBeTrue();
 
     // Panic Control is enabled but the route name set null
     $panic = PanicControlModel::factory()->create([
@@ -115,7 +115,7 @@ test('rule route name', function () {
             'route-name' => false,
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeTrue();
+    expect(PanicControl::check($panic->name))->toBeTrue();
 });
 
 test('rule url path', function () {
@@ -130,7 +130,7 @@ test('rule url path', function () {
             ],
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeFalse();
+    expect(PanicControl::check($panic->name))->toBeFalse();
 
     // Url Path exists and Panic Control is enabled
     $panic = PanicControlModel::factory()->create([
@@ -141,7 +141,7 @@ test('rule url path', function () {
             ],
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeTrue();
+    expect(PanicControl::check($panic->name))->toBeTrue();
 
     // Url Path exists and Panic Control is enabled but the Url Path is not in the list
     $panic = PanicControlModel::factory()->create([
@@ -152,7 +152,7 @@ test('rule url path', function () {
             ],
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeFalse();
+    expect(PanicControl::check($panic->name))->toBeFalse();
 
     // Panic Control is enabled but the Url Path set false
     $panic = PanicControlModel::factory()->create([
@@ -161,7 +161,7 @@ test('rule url path', function () {
             'url-path' => false,
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeTrue();
+    expect(PanicControl::check($panic->name))->toBeTrue();
 
     // Panic Control is enabled but the Url Path set null
     $panic = PanicControlModel::factory()->create([
@@ -170,7 +170,7 @@ test('rule url path', function () {
             'url-path' => false,
         ],
     ]);
-    expect(PanicControl::check($panic->service))->toBeTrue();
+    expect(PanicControl::check($panic->name))->toBeTrue();
 });
 
 test('rule percent access')->todo();

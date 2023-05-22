@@ -19,7 +19,7 @@ class PanicControl
         $config = config('panic-control.cache');
         if (! self::$list) {
             self::$list = Cache::store($config['store'])->remember($config['key'], $config['time'], function () {
-                return PanicControlModel::all()->keyBy('service')->toArray();
+                return PanicControlModel::all()->keyBy('name')->toArray();
             });
         }
 
@@ -30,7 +30,7 @@ class PanicControl
         try {
             return self::$list[$panic];
         } catch (\Throwable $th) {
-            Log::error('Panic Control não encontrado.', ['service' => $panic]);
+            Log::error('Panic Control não encontrado.', ['name' => $panic]);
             throw new Exception('Panic Control não encontrado.');
         }
     }
@@ -75,7 +75,7 @@ class PanicControl
     public function create(array $parameters): PanicControlModel
     {
         $validator = Validator::make($parameters, [
-            'service' => 'required|unique:panic_controls|max:255',
+            'name' => 'required|unique:panic_controls|max:255',
             'description' => 'max:255',
             'status' => 'boolean',
         ]);
@@ -90,16 +90,16 @@ class PanicControl
 
     public function update(string|int $panic, array $parameters): PanicControlModel
     {
-        $panic = (is_int($panic)) ? PanicControlModel::find($panic) : PanicControlModel::where('service', $panic)->first();
+        $panic = (is_int($panic)) ? PanicControlModel::find($panic) : PanicControlModel::where('name', $panic)->first();
 
         if (empty($panic)) {
-            Log::error('Panic Control não encontrado.', ['service' => $panic, 'parameters' => $parameters]);
+            Log::error('Panic Control não encontrado.', ['name' => $panic, 'parameters' => $parameters]);
             throw new Exception('Panic Control não encontrado.');
         }
 
         $parameters = array_merge(
             $panic->only([
-                'service',
+                'name',
                 'description',
                 'status',
             ]),
@@ -107,7 +107,7 @@ class PanicControl
         );
 
         $validator = Validator::make($parameters, [
-            'service' => [
+            'name' => [
                 'required',
                 Rule::unique('panic_controls')->ignore($panic->id),
                 'max:255',

@@ -9,7 +9,7 @@ use PanicControl\Facades\PanicControl as PanicControlFacade;
 class PanicControl extends Model
 {
     protected $fillable = [
-        'service',
+        'name',
         'description',
         'status',
         'rules',

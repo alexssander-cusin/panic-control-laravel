@@ -7,8 +7,8 @@ test('Create a Panic Control by facade', function () {
     $count = PanicControlModel::count();
 
     $panic = [
-        'service' => 'service',
-        'description' => 'description',
+        'name' => 'panic-name',
+        'description' => 'panic-description',
         'status' => true,
     ];
 
@@ -16,7 +16,7 @@ test('Create a Panic Control by facade', function () {
 
     expect($panicControl)->toBeInstanceOf(\PanicControl\Models\PanicControl::class);
 
-    expect($panicControl->service)->toBe($panic['service']);
+    expect($panicControl->name)->toBe($panic['name']);
     expect($panicControl->description)->toBe($panic['description']);
     expect($panicControl->status)->toBe($panic['status']);
 
@@ -26,8 +26,8 @@ test('Create a Panic Control by facade', function () {
 });
 
 test('Failed to create Panic with wrong parameters', function (string $test, array $parameters) {
-    if ($test == 'service.notUnique') {
-        $parameters = PanicControlModel::factory()->make(['service' => $parameters['service']])->toArray();
+    if ($test == 'name.notUnique') {
+        $parameters = PanicControlModel::factory()->make(['name' => $parameters['name']])->toArray();
     }
 
     $count = PanicControlModel::count();
@@ -38,22 +38,22 @@ test('Failed to create Panic with wrong parameters', function (string $test, arr
 
     expect(PanicControlModel::count())->toBe($count);
 })->with([
-    ['service.empty', fn () => PanicControlModel::factory()->make(['service' => ''])->toArray()],
-    ['service.notUnique', fn () => PanicControlModel::factory()->create()->toArray()],
-    ['service.max:259', fn () => PanicControlModel::factory()->make(['service' => 'serviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceserviceservice'])->toArray()],
+    ['name.empty', fn () => PanicControlModel::factory()->make(['name' => ''])->toArray()],
+    ['name.notUnique', fn () => PanicControlModel::factory()->create()->toArray()],
+    ['name.max:264', fn () => PanicControlModel::factory()->make(['name' => 'namenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamename'])->toArray()],
     ['description.max:264', fn () => PanicControlModel::factory()->make(['description' => 'descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription'])->toArray()],
-    ['status.string', ['service' => 'service', 'description' => 'description', 'status' => 'disabled']],
+    ['status.string', ['name' => 'name', 'description' => 'description', 'status' => 'disabled']],
 ]);
 
-test('update a Panic Control by facade from service name', function ($key, $value) {
+test('update a Panic Control by facade from panic name', function ($key, $value) {
     $panic = PanicControlModel::factory()->create();
 
-    $newPanic = PanicControl::update($panic->service, [$key => $value]);
+    $newPanic = PanicControl::update($panic->name, [$key => $value]);
 
     $this->assertDatabaseMissing('panic_controls', $panic->toArray());
-    $this->assertDatabaseHas('panic_controls', $newPanic->only(['service', 'description', 'status']));
+    $this->assertDatabaseHas('panic_controls', $newPanic->only(['name', 'description', 'status']));
 })->with([
-    ['service', 'new service'],
+    ['name', 'new name'],
     ['description', 'new description'],
     ['status', true],
 ]);
@@ -63,13 +63,13 @@ test('check status a Panic Control by facade', function () {
         'status' => true,
     ]);
 
-    expect(PanicControl::check($panic->service))->toBeTrue($panic->status);
+    expect(PanicControl::check($panic->name))->toBeTrue($panic->status);
 
     $panic = PanicControlModel::factory()->create([
         'status' => false,
     ]);
 
-    expect(PanicControl::check($panic->service))->toBeFalse($panic->status);
+    expect(PanicControl::check($panic->name))->toBeFalse($panic->status);
 });
 
 test('list all Panic Control by facade', function () {
@@ -81,5 +81,5 @@ test('list all Panic Control by facade', function () {
 test('detail a Panic Control by facade', function () {
     $panic = PanicControlModel::factory()->create();
 
-    expect(PanicControl::find($panic->service))->toMatchArray($panic->toArray());
+    expect(PanicControl::find($panic->name))->toMatchArray($panic->toArray());
 });

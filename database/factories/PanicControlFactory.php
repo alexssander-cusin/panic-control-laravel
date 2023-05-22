@@ -13,7 +13,7 @@ class PanicControlFactory extends Factory
     public function definition()
     {
         return [
-            'service' => Str::snake($this->faker->name),
+            'name' => Str::snake($this->faker->name),
             'description' => $this->faker->text,
             'status' => $this->faker->boolean(),
         ];

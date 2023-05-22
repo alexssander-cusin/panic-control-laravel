@@ -7,13 +7,13 @@ use PanicControl\Models\PanicControl as PanicControlModel;
 
 class PanicControlActiveCommand extends Command
 {
-    public $signature = 'panic-control:active {service}';
+    public $signature = 'panic-control:active {name}';
 
     public $description = 'Ativa um Panic Control';
 
     public function handle(): int
     {
-        $panic = PanicControlModel::where('service', $this->argument('service'))->first();
+        $panic = PanicControlModel::where('name', $this->argument('name'))->first();
 
         if (! $panic) {
             $this->error('Panic Control não encontrado.');
