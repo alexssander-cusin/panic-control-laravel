@@ -10,5 +10,6 @@ return [
     ],
     'rules' => [
         'route-name' => PanicControl\Rules\RouteName::class,
+        'url-path' => PanicControl\Rules\UrlPath::class,
     ],
 ];
