@@ -29,6 +29,9 @@ This is the contents rof the published config file:
 
 ```php
 return [
+    'database' => [
+        'table' => 'panic_controls',
+    ],
     'cache' => [
         'store' => env('CACHE_DRIVER', 'file'),
         'key' => 'panic-control',
