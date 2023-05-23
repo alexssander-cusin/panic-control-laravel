@@ -130,7 +130,7 @@ php artisan panic-control:desactive panic-control-name
 
 We can add supplementary rules that will respect the main status
 
-All rules must return true for the panic to be activated, if nothing is registered, it is disregarded.
+> All rules must return true for the panic to be activated, if nothing is registered, it is disregarded.
 
 ### Route Name
 
