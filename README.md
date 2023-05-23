@@ -40,7 +40,7 @@ return [
     ],
 ];
 ```
-
+---
 ## Usage
 
 ### Facade
@@ -126,6 +126,92 @@ Desactive a Panic Control
 php artisan panic-control:desactive panic-control-name
 ```
 
+## Rules
+
+We can add supplementary rules that will respect the main status
+
+All rules must return true for the panic to be activated, if nothing is registered, it is disregarded.
+
+### Route Name
+
+Checks whether the `Route::currentRouteName()` callback is listed under the `route-name` key.
+
+```php
+use PanicControl\Facades\PanicControl;
+
+PanicControl::create([
+    'name' => 'panic-control-name',
+    'description' => 'Description for Panic Control',
+    'status' => true,
+    'rules' => [
+        'route-name' => [
+            'route.name.home',
+            'route.name.contact'
+        ],
+    ],
+]);
+```
+
+### URL Path
+
+Checks whether the `Request::path()` return is listed under the `url-path` key.
+
+```php
+use PanicControl\Facades\PanicControl;
+
+PanicControl::create([
+    'name' => 'panic-control-name',
+    'description' => 'Description for Panic Control',
+    'status' => true,
+    'rules' => [
+        'url-path' => [
+            'url/path/home',
+            'url/path/contact'
+        ],
+    ],
+]);
+```
+
+### Custom Rules
+
+To create a custom rule follow the example
+
+```php
+use PanicControl\Contracts\Rule as RuleContract;
+
+class ClassName implements RuleContract
+{
+    public function rule(array $parameters): bool|null
+    {
+        return false|true|null;
+    }
+}
+```
+
+The class must be registered in `config/panic-control.php` under the `rules` key.
+
+```php
+return [
+    ...
+    'rules' => [
+        'class-name' => Namespace/ClassName::class,
+    ],
+];
+```
+
+In the `rules` column of the database, add the key registered in `config/panic-control.php` with the parameters that will be sent to the class.
+
+```php
+PanicControl::create([
+    'name' => 'panic-control-name',
+    'description' => 'Description for Panic Control',
+    'status' => true,
+    'rules' => [
+        'class-name' => 'parameters',
+    ],
+]);
+```
+---
 ## Testing
 
 ```bash
