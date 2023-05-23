@@ -40,7 +40,7 @@ return [
     ],
 ];
 ```
----
+
 ## Usage
 
 ### Facade
@@ -211,7 +211,7 @@ PanicControl::create([
     ],
 ]);
 ```
----
+
 ## Testing
 
 ```bash
