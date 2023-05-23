@@ -3,6 +3,9 @@
 // config for PanicControl/PanicControl
 
 return [
+    'database' => [
+        'table' => 'panic_controls',
+    ],
     'cache' => [
         'store' => env('CACHE_DRIVER', 'file'),
         'key' => 'panic-control',

@@ -8,6 +8,8 @@ use PanicControl\Facades\PanicControl as PanicControlFacade;
 
 class PanicControl extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'name',
         'description',
@@ -15,12 +17,17 @@ class PanicControl extends Model
         'rules',
     ];
 
-    use HasFactory;
-
     protected $casts = [
         'status' => 'boolean',
         'rules' => 'array',
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->setTable(config('panic-control.database.table'));
+    }
 
     protected static function booted(): void
     {
