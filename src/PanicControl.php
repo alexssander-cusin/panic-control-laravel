@@ -75,7 +75,7 @@ class PanicControl
     public function create(array $parameters): PanicControlModel
     {
         $validator = Validator::make($parameters, [
-            'name' => 'required|unique:panic_controls|max:255',
+            'name' => 'required|unique:'.config('panic-control.database.table').'|max:255',
             'description' => 'max:255',
             'status' => 'boolean',
         ]);
@@ -109,7 +109,7 @@ class PanicControl
         $validator = Validator::make($parameters, [
             'name' => [
                 'required',
-                Rule::unique('panic_controls')->ignore($panic->id),
+                Rule::unique(config('panic-control.database.table'))->ignore($panic->id),
                 'max:255',
             ],
             'description' => 'max:255',
