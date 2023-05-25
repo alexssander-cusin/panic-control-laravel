@@ -180,9 +180,10 @@ PanicControl::create([
 To create a custom rule follow the example
 
 ```php
+use PanicControl\Rules\Rule;
 use PanicControl\Contracts\Rule as RuleContract;
 
-class ClassName implements RuleContract
+class ClassName extends Rule implements RuleContract
 {
     public function rule(array $parameters): bool|null
     {

@@ -58,7 +58,9 @@ class PanicControl
                 }
 
                 try {
-                    $rule = app(config('panic-control.rules')[$rule])->rule($parameters);
+                    $rule = app(config('panic-control.rules')[$rule], [
+                        'panic' => $panic,
+                    ])->rule($parameters);
                 } catch (\Throwable $th) {
                     throw new PanicControlRuleDoesNotExist($rule);
                 }

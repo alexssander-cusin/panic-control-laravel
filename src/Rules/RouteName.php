@@ -5,7 +5,7 @@ namespace PanicControl\Rules;
 use Illuminate\Support\Facades\Route;
 use PanicControl\Contracts\Rule as RuleContract;
 
-class RouteName implements RuleContract
+class RouteName extends Rule implements RuleContract
 {
     public function rule(array $parameters): bool|null
     {
