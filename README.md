@@ -25,7 +25,7 @@ You can publish the config file with:
 php artisan vendor:publish --tag="panic-control-laravel-config"
 ```
 
-This is the contents rof the published config file:
+This are the contents of the published config file:
 
 ```php
 return [
@@ -100,8 +100,6 @@ PanicControl::check('panic-control-name');
 Check if Panic Control is Active
 
 ```php
-use PanicControl\Facades\PanicControl;
-
 getPanicControlActive('panic-control-name');
 ```
 
@@ -119,13 +117,13 @@ Detail a Panic Control
 php artisan panic-control:show panic-control-name
 ```
 
-Active a Panic Control
+Activate a Panic Control
 
 ```bash
 php artisan panic-control:active panic-control-name
 ```
 
-Desactive a Panic Control
+Deactivate a Panic Control
 
 ```bash
 php artisan panic-control:desactive panic-control-name
@@ -135,11 +133,11 @@ php artisan panic-control:desactive panic-control-name
 
 We can add supplementary rules that will respect the main status
 
-> All rules must return true for the panic to be activated, if nothing is registered, it is disregarded.
+> All rules must return true for the panic to be activated, if nothing is registered or return null|false, it is disregarded.
 
 ### Route Name
 
-Checks whether the `Route::currentRouteName()` callback is listed under the `route-name` key.
+Checks whether the `Route::currentRouteName()` return is listed inside the `route-name` key.
 
 ```php
 use PanicControl\Facades\PanicControl;
@@ -159,7 +157,7 @@ PanicControl::create([
 
 ### URL Path
 
-Checks whether the `Request::path()` return is listed under the `url-path` key.
+Checks whether the `Request::path()` return is listed the `url-path` key.
 
 ```php
 use PanicControl\Facades\PanicControl;
@@ -179,8 +177,7 @@ PanicControl::create([
 
 ### Sampling
 
-Set active when the chance number by a possibilities number, example 1 out of 10 or 5 out of 10.
-
+Will be activated for just a sample of the users, based on the number of chances, and the "out of" sample. In the example below, the panic control will be activated for 5 out of 10 users i.e. half of the users.
 > IMPORTANT: the chance is a probability, there may be a small variation both for more and for less.
 
 ```php
@@ -203,7 +200,7 @@ PanicControl::create([
 
 ### User logged
 
-Check if user logged id or email is in list.
+Check if user logged `id` or `email` is listed the `user` key.
 
 ```php
 use PanicControl\Facades\PanicControl;
