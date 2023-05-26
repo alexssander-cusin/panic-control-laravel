@@ -6,9 +6,8 @@ use Exception;
 
 class PanicControlRuleDoesNotExist extends Exception
 {
-    public function __construct(string $rule)
+    public function __construct(protected string $rule)
     {
-        $this->rule = $rule;
         parent::__construct("Panic Control: Rule {$this->rule} does not exist.");
     }
 

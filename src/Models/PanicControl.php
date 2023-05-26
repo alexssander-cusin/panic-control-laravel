@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use PanicControl\Facades\PanicControl as PanicControlFacade;
 
+/**
+ * @property string $name
+ * @property string $description
+ * @property bool $status
+ */
 class PanicControl extends Model
 {
     use HasFactory;

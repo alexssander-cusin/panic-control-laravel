@@ -28,11 +28,7 @@ class PanicControl
             return self::$list;
         }
 
-        try {
-            return self::$list[$panic];
-        } catch (\Throwable $th) {
-            throw new PanicControlDoesNotExist($panic);
-        }
+        return self::$list[$panic] ?? throw new PanicControlDoesNotExist($panic);
     }
 
     public function all(): array
@@ -63,7 +59,7 @@ class PanicControl
 
         if ($status && $panic['rules']) {
             foreach ($panic['rules'] as $rule => $parameters) {
-                if ($panic === false || empty($parameters)) {
+                if (empty($parameters)) {
                     continue;
                 }
 
