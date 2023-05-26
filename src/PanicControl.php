@@ -51,7 +51,7 @@ class PanicControl
         try {
             $panic = $this->get($panic);
         } catch (PanicControlDoesNotExist $th) {
-            if (app()->environment('production')) {
+            if (! app()->hasDebugModeEnabled()) {
                 Log::error($th->getMessage(), ['name' => $panic]);
 
                 return false;

@@ -72,14 +72,12 @@ test('check status a Panic Control by facade', function () {
     ]);
     expect(PanicControl::check($panic->name))->toBeFalse();
 
-    //Panic not exists in local
-    expect(fn () => PanicControl::check('panic-not-found'))->toThrow(PanicControlDoesNotExist::class);
-
-    //Panic not exists in production
-    app()->detectEnvironment(function () {
-        return 'production';
-    });
+    //Panic not exists in debug false
     expect(PanicControl::check('panic-not-found'))->toBeFalse();
+
+    //Panic not exists in debug true
+    config()->set('app.debug', true);
+    expect(fn () => PanicControl::check('panic-not-found'))->toThrow(PanicControlDoesNotExist::class);
 });
 
 test('list all Panic Control by facade', function () {
