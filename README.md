@@ -175,6 +175,30 @@ PanicControl::create([
 ]);
 ```
 
+### Sampling
+
+Set active when the chance number by a possibilities number, example 1 out of 10 or 5 out of 10.
+
+> IMPORTANT: the chance is a probability, there may be a small variation both for more and for less.
+
+```php
+use PanicControl\Facades\PanicControl;
+
+PanicControl::create([
+    'name' => 'panic-control-name',
+    'description' => 'Description for Panic Control',
+    'status' => true,
+    'rules' => [
+        'rules' => [
+            'sampling' => [
+                'chance' => 5,
+                'out_of' => 10,
+            ],
+        ],
+    ],
+]);
+```
+
 ### Custom Rules
 
 To create a custom rule follow the example

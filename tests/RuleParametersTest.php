@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Lottery;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
@@ -167,12 +168,91 @@ test('rule url path', function () {
     $panic = PanicControlModel::factory()->create([
         'status' => true,
         'rules' => [
-            'url-path' => false,
+            'url-path' => null,
         ],
     ]);
     expect(PanicControl::check($panic->name))->toBeTrue();
 });
 
-test('rule percent access')->todo();
+test('rule user sampling', function () {
+    // Sampling exists but Panic Control is disabled
+    $panic = PanicControlModel::factory()->create([
+        'status' => false,
+        'rules' => [
+            'sampling' => [
+                'chance' => 1,
+                'out_of' => 10,
+            ],
+        ],
+    ]);
+    expect(PanicControl::check($panic->name))->toBeFalse();
+
+    // Panic Control is enabled but the Sampling set false
+    $panic = PanicControlModel::factory()->create([
+        'status' => true,
+        'rules' => [
+            'sampling' => false,
+        ],
+    ]);
+    expect(PanicControl::check($panic->name))->toBeTrue();
+
+    // Panic Control is enabled but the Sampling set null
+    $panic = PanicControlModel::factory()->create([
+        'status' => true,
+        'rules' => [
+            'sampling' => null,
+        ],
+    ]);
+    expect(PanicControl::check($panic->name))->toBeTrue();
+
+    //Set all Sampling with true
+    Lottery::alwaysWin();
+
+    // Panic Control is enabled and Sampling return true
+    $panic = PanicControlModel::factory()->create([
+        'status' => true,
+        'rules' => [
+            'sampling' => [
+                'chance' => 1,
+                'out_of' => 10,
+            ],
+        ],
+    ]);
+    expect(PanicControl::check($panic->name))->toBeTrue();
+    expect(Session::get("panic-control.{$panic['name']}.sampling"))->toBeTrue();
+
+    //Set all Sampling with false
+    Lottery::alwaysLose();
+
+    // Panic Control is enabled but the Sampling return false
+    $panic = PanicControlModel::factory()->create([
+        'status' => true,
+        'rules' => [
+            'sampling' => [
+                'chance' => 1,
+                'out_of' => 10,
+            ],
+        ],
+    ]);
+    expect(PanicControl::check($panic->name))->toBeFalse();
+    expect(Session::get("panic-control.{$panic['name']}.sampling"))->toBeFalse();
+
+    // Panic Control is enabled but the Sampling return iquals chance all times
+    $panic = PanicControlModel::factory()->create([
+        'status' => true,
+        'rules' => [
+            'sampling' => [
+                'chance' => 5,
+                'out_of' => 10,
+            ],
+        ],
+    ]);
+    $chance = PanicControl::check($panic->name);
+    expect(Session::get("panic-control.{$panic['name']}.sampling"))->toBe($chance);
+    for ($i = 0; $i < 10; $i++) {
+        expect(PanicControl::check($panic->name))->toBe($chance);
+    }
+});
+
 test('rule user')->todo();
 test('rule user group')->todo();
