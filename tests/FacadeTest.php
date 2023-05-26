@@ -1,5 +1,6 @@
 <?php
 
+use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
@@ -59,17 +60,26 @@ test('update a Panic Control by facade from panic name', function ($key, $value)
 ]);
 
 test('check status a Panic Control by facade', function () {
+    //Check status TRUE
     $panic = PanicControlModel::factory()->create([
         'status' => true,
     ]);
+    expect(PanicControl::check($panic->name))->toBeTrue();
 
-    expect(PanicControl::check($panic->name))->toBeTrue($panic->status);
-
+    //Check Status FALSE
     $panic = PanicControlModel::factory()->create([
         'status' => false,
     ]);
+    expect(PanicControl::check($panic->name))->toBeFalse();
 
-    expect(PanicControl::check($panic->name))->toBeFalse($panic->status);
+    //Panic not exists in local
+    expect(fn () => PanicControl::check('panic-not-found'))->toThrow(PanicControlDoesNotExist::class);
+
+    //Panic not exists in production
+    app()->detectEnvironment(function () {
+        return 'production';
+    });
+    expect(PanicControl::check('panic-not-found'))->toBeFalse();
 });
 
 test('list all Panic Control by facade', function () {

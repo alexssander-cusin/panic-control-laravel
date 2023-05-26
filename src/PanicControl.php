@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlRuleDoesNotExist;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
@@ -30,8 +31,7 @@ class PanicControl
         try {
             return self::$list[$panic];
         } catch (\Throwable $th) {
-            Log::error('Panic Control não encontrado.', ['name' => $panic]);
-            throw new Exception('Panic Control não encontrado.');
+            throw new PanicControlDoesNotExist($panic);
         }
     }
 
@@ -47,7 +47,17 @@ class PanicControl
 
     public function check(string $panic): bool
     {
-        $panic = $this->get($panic);
+
+        try {
+            $panic = $this->get($panic);
+        } catch (PanicControlDoesNotExist $th) {
+            if (app()->environment('production')) {
+                Log::error($th->getMessage(), ['name' => $panic]);
+
+                return false;
+            }
+            throw $th;
+        }
 
         $status = $panic['status'];
 
