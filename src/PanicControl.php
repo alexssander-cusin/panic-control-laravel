@@ -72,6 +72,9 @@ class PanicControl
                         'panic' => $panic,
                     ])->rule($parameters);
                 } catch (\Throwable $th) {
+                    // if (app()->environment('testing')) {
+                    //     throw $th;
+                    // }
                     throw new PanicControlRuleDoesNotExist($rule);
                 }
 

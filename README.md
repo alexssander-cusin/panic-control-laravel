@@ -40,6 +40,8 @@ return [
     'rules' => [
         'route-name' => PanicControl\Rules\RouteName::class,
         'url-path' => PanicControl\Rules\UrlPath::class,
+        'sampling' => PanicControl\Rules\Sampling::class,
+        'user' => PanicControl\Rules\User::class,
     ],
 ];
 ```
@@ -193,6 +195,28 @@ PanicControl::create([
             'sampling' => [
                 'chance' => 5,
                 'out_of' => 10,
+            ],
+        ],
+    ],
+]);
+```
+
+### User logged
+
+Check if user logged id or email is in list.
+
+```php
+use PanicControl\Facades\PanicControl;
+
+PanicControl::create([
+    'name' => 'panic-control-name',
+    'description' => 'Description for Panic Control',
+    'status' => true,
+    'rules' => [
+        'rules' => [
+            'user' => [
+                1, //User ID
+                'user@test.com', //User EMAIL
             ],
         ],
     ],
