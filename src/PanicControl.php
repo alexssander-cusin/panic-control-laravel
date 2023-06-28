@@ -17,9 +17,10 @@ class PanicControl
 
     protected function get(string $panic = null): array
     {
-        $config = config('panic-control.cache');
+        $cache = config('panic-control.cache');
         if (! self::$list) {
-            self::$list = Cache::store($config['store'])->remember($config['key'], $config['time'], function () {
+            $cacheStore = $cache['enabled'] ? $cache['store'] : 'array';
+            self::$list = Cache::store($cacheStore)->remember($cache['key'], $cache['time'], function () {
                 return PanicControlModel::all()->keyBy('name')->toArray();
             });
         }
@@ -43,7 +44,6 @@ class PanicControl
 
     public function check(string $panic): bool
     {
-
         try {
             $panic = $this->get($panic);
         } catch (PanicControlDoesNotExist $th) {
