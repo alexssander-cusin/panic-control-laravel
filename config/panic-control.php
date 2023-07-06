@@ -7,7 +7,7 @@ return [
         'table' => 'panic_controls',
     ],
     'cache' => [
-        'enabled' => env('PANIC_CACHE_ENABLED', true),
+        'enabled' => true,
         'store' => env('CACHE_DRIVER', 'file'),
         'key' => 'panic-control',
         'time' => 60,
