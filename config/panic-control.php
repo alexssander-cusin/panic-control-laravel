@@ -3,8 +3,18 @@
 // config for PanicControl/PanicControl
 
 return [
-    'database' => [
-        'table' => 'panic_controls',
+    'default' => 'database',
+    'stores' => [
+        'database' => [
+            'table' => 'panic_controls',
+        ],
+        'file' => [
+            'disk' => config('filesystems.default'),
+            'path' => 'panic-control.json',
+        ],
+        'link' => [
+            'url' => 'https://localhost/panic-control.json',
+        ],
     ],
     'cache' => [
         'enabled' => true,

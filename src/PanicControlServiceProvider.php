@@ -17,6 +17,7 @@ class PanicControlServiceProvider extends PackageServiceProvider
         $package
             ->name('panic-control-laravel')
             ->hasConfigFile(['panic-control'])
+            ->publishesServiceProvider('PanicControlServiceProvider')
             ->hasMigration('create_panic_control_table')
             ->hasCommands([
                 \PanicControl\Commands\PanicControlShowCommand::class,

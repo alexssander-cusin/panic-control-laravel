@@ -20,7 +20,7 @@ return new class extends Migration
             'name' => 'None',
         ]);
 
-        Schema::create(config('panic-control.database.table'), function (Blueprint $table) {
+        Schema::create(config('panic-control.stores.database.table'), function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('description');
@@ -40,6 +40,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('panic_control_categories');
-        Schema::dropIfExists(config('panic-control.database.table'));
+        Schema::dropIfExists(config('panic-control.stores.database.table'));
     }
 };

@@ -5,6 +5,7 @@ namespace PanicControl\Tests;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 use PanicControl\PanicControlServiceProvider;
+use PanicControl\Providers\StoreServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -21,6 +22,7 @@ class TestCase extends Orchestra
     {
         return [
             PanicControlServiceProvider::class,
+            StoreServiceProvider::class,
         ];
     }
 

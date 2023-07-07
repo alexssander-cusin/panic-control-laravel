@@ -27,11 +27,9 @@ class PanicControl extends Model
         'rules' => 'array',
     ];
 
-    public function __construct(array $attributes = [])
+    public function getTable()
     {
-        parent::__construct($attributes);
-
-        $this->setTable(config('panic-control.database.table'));
+        return config('panic-control.stores.database.table');
     }
 
     protected static function booted(): void

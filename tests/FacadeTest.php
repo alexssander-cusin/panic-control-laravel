@@ -21,7 +21,7 @@ test('Create a Panic Control by facade', function () {
     expect($panicControl->description)->toBe($panic['description']);
     expect($panicControl->status)->toBe($panic['status']);
 
-    $this->assertDatabaseHas(config('panic-control.database.table'), $panic);
+    $this->assertDatabaseHas(config('panic-control.stores.database.table'), $panic);
 
     expect(PanicControlModel::count())->toBe($count + 1);
 });
@@ -35,7 +35,7 @@ test('Failed to create Panic with wrong parameters', function (string $test, arr
 
     expect(fn () => PanicControl::create($parameters))->toThrow(Exception::class);
 
-    $this->assertDatabaseMissing(config('panic-control.database.table'), $parameters);
+    $this->assertDatabaseMissing(config('panic-control.stores.database.table'), $parameters);
 
     expect(PanicControlModel::count())->toBe($count);
 })->with([
@@ -51,8 +51,8 @@ test('update a Panic Control by facade from panic name', function ($key, $value)
 
     $newPanic = PanicControl::update($panic->name, [$key => $value]);
 
-    $this->assertDatabaseMissing(config('panic-control.database.table'), $panic->toArray());
-    $this->assertDatabaseHas(config('panic-control.database.table'), $newPanic->only(['name', 'description', 'status']));
+    $this->assertDatabaseMissing(config('panic-control.stores.database.table'), $panic->toArray());
+    $this->assertDatabaseHas(config('panic-control.stores.database.table'), $newPanic->only(['name', 'description', 'status']));
 })->with([
     ['name', 'new name'],
     ['description', 'new description'],

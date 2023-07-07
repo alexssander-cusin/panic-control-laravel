@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use PanicControl\Contracts\Store;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlRuleDoesNotExist;
 use PanicControl\Models\PanicControl as PanicControlModel;
@@ -15,13 +16,18 @@ class PanicControl
 {
     private static $list = [];
 
+    public function __construct(
+        private Store $store
+    ) {
+    }
+
     protected function get(string $panic = null): array
     {
         $cache = config('panic-control.cache');
         if (! self::$list) {
             $cacheStore = $cache['enabled'] ? $cache['store'] : 'array';
             self::$list = Cache::store($cacheStore)->remember($cache['key'], $cache['time'], function () {
-                return PanicControlModel::all()->keyBy('name')->toArray();
+                return $this->store->all();
             });
         }
 
@@ -86,7 +92,7 @@ class PanicControl
     public function create(array $parameters): PanicControlModel
     {
         $validator = Validator::make($parameters, [
-            'name' => 'required|unique:'.config('panic-control.database.table').'|max:255',
+            'name' => 'required|unique:'.config('panic-control.stores.database.table').'|max:255',
             'description' => 'max:255',
             'status' => 'boolean',
         ]);
@@ -120,7 +126,7 @@ class PanicControl
         $validator = Validator::make($parameters, [
             'name' => [
                 'required',
-                Rule::unique(config('panic-control.database.table'))->ignore($panic->id),
+                Rule::unique(config('panic-control.stores.database.table'))->ignore($panic->id),
                 'max:255',
             ],
             'description' => 'max:255',
