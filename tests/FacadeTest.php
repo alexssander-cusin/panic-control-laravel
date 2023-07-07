@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Arr;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
@@ -15,11 +16,11 @@ test('Create a Panic Control by facade', function () {
 
     $panicControl = PanicControl::create($panic);
 
-    expect($panicControl)->toBeInstanceOf(\PanicControl\Models\PanicControl::class);
+    expect($panicControl)->toBeArray();
 
-    expect($panicControl->name)->toBe($panic['name']);
-    expect($panicControl->description)->toBe($panic['description']);
-    expect($panicControl->status)->toBe($panic['status']);
+    expect($panicControl['name'])->toBe($panic['name']);
+    expect($panicControl['description'])->toBe($panic['description']);
+    expect($panicControl['status'])->toBe($panic['status']);
 
     $this->assertDatabaseHas(config('panic-control.stores.database.table'), $panic);
 
@@ -49,10 +50,11 @@ test('Failed to create Panic with wrong parameters', function (string $test, arr
 test('update a Panic Control by facade from panic name', function ($key, $value) {
     $panic = PanicControlModel::factory()->create();
 
-    $newPanic = PanicControl::update($panic->name, [$key => $value]);
+    $newPanic = PanicControl::update($panic['name'], [$key => $value]);
 
+    expect($newPanic)->toBeArray();
     $this->assertDatabaseMissing(config('panic-control.stores.database.table'), $panic->toArray());
-    $this->assertDatabaseHas(config('panic-control.stores.database.table'), $newPanic->only(['name', 'description', 'status']));
+    $this->assertDatabaseHas(config('panic-control.stores.database.table'), Arr::only($newPanic, ['name', 'description', 'status']));
 })->with([
     ['name', 'new name'],
     ['description', 'new description'],

@@ -2,15 +2,11 @@
 
 namespace PanicControl;
 
-use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use PanicControl\Contracts\Store;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlRuleDoesNotExist;
-use PanicControl\Models\PanicControl as PanicControlModel;
 
 class PanicControl
 {
@@ -21,7 +17,7 @@ class PanicControl
     ) {
     }
 
-    protected function get(string $panic = null): array
+    protected function getCacheControl(string $panic = null): array
     {
         $cache = config('panic-control.cache');
         if (! self::$list) {
@@ -40,18 +36,18 @@ class PanicControl
 
     public function all(): array
     {
-        return $this->get();
+        return $this->getCacheControl();
     }
 
     public function find(string $panic): array
     {
-        return $this->get($panic);
+        return $this->getCacheControl($panic);
     }
 
     public function check(string $panic): bool
     {
         try {
-            $panic = $this->get($panic);
+            $panic = $this->getCacheControl($panic);
         } catch (PanicControlDoesNotExist $th) {
             if (! app()->hasDebugModeEnabled()) {
                 Log::error($th->getMessage(), ['name' => $panic]);
@@ -89,57 +85,20 @@ class PanicControl
         return $status;
     }
 
-    public function create(array $parameters): PanicControlModel
+    public function create(array $parameters): array
     {
-        $validator = Validator::make($parameters, [
-            'name' => 'required|unique:'.config('panic-control.stores.database.table').'|max:255',
-            'description' => 'max:255',
-            'status' => 'boolean',
-        ]);
+        $panic = $this->store->create($parameters);
 
-        if ($validator->fails()) {
-            Log::error('Campos inválidos.', $validator->errors()->all());
-            throw new Exception('Campos inválidos.');
-        }
+        $this->clear();
 
-        return PanicControlModel::create($validator->validated());
+        return $panic;
     }
 
-    public function update(string|int $panic, array $parameters): PanicControlModel
+    public function update(string|int $panic, array $parameters): array
     {
-        $panic = (is_int($panic)) ? PanicControlModel::find($panic) : PanicControlModel::where('name', $panic)->first();
+        $panic = $this->store->update($panic, $parameters);
 
-        if (empty($panic)) {
-            Log::error('Panic Control não encontrado.', ['name' => $panic, 'parameters' => $parameters]);
-            throw new Exception('Panic Control não encontrado.');
-        }
-
-        $parameters = array_merge(
-            $panic->only([
-                'name',
-                'description',
-                'status',
-            ]),
-            $parameters
-        );
-
-        $validator = Validator::make($parameters, [
-            'name' => [
-                'required',
-                Rule::unique(config('panic-control.stores.database.table'))->ignore($panic->id),
-                'max:255',
-            ],
-            'description' => 'max:255',
-            'status' => 'boolean',
-        ]);
-
-        if ($validator->fails()) {
-            Log::error('Campos inválidos.', $validator->errors()->all());
-            throw new Exception('Campos inválidos.');
-        }
-
-        $panic->fill($validator->validated());
-        $panic->save();
+        $this->clear();
 
         return $panic;
     }

@@ -270,6 +270,8 @@ composer test
 
 ## TODO
 
+- [ ] Verify clear cache on Model
+- [ ] Update Documentation
 - [ ] Support Panic Control category
 
 ## Changelog
