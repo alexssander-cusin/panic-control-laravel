@@ -21,6 +21,7 @@ class StoreServiceProvider extends ServiceProvider implements DeferrableProvider
          */
         match (config('panic-control.default')) {
             'database' => $this->app->bind(Store::class, DatabaseStore::class),
+            default => throw new \Exception('Invalid store provided'),
         };
     }
 
