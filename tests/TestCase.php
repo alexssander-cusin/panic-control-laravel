@@ -35,10 +35,17 @@ class TestCase extends Orchestra
         $migration->up();
     }
 
-    public function assertPanicControlHas($panic)
+    public function assertPanicControlHas($parameters)
     {
         match (config('panic-control.default')) {
-            'database' => $this->assertDatabaseHas(config('panic-control.stores.database.table'), $panic),
+            'database' => $this->assertDatabaseHas(config('panic-control.stores.database.table'), $parameters),
+        };
+    }
+
+    public function assertPanicControlMissing($parameters)
+    {
+        match (config('panic-control.default')) {
+            'database' => $this->assertDatabaseMissing(config('panic-control.stores.database.table'), $parameters),
         };
     }
 }
