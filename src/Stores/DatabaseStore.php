@@ -70,4 +70,9 @@ final class DatabaseStore implements Store
 
         return $panic->toArray();
     }
+
+    public function count(): int
+    {
+        return PanicControl::count();
+    }
 }

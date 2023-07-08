@@ -103,6 +103,11 @@ class PanicControl
         return $panic;
     }
 
+    public function count(): int
+    {
+        return $this->store->count();
+    }
+
     public function clear()
     {
         Cache::forget(config('panic-control.cache.name'));
