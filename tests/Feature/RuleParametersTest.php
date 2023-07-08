@@ -5,7 +5,7 @@ use Illuminate\Support\Lottery;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
-test('rule does not exist', function () {
+test('rule does not exist', function (string $storeName, null $store) {
     $panic = PanicControl::create(PanicControlModel::factory()->make([
         'status' => true,
         'rules' => [
@@ -16,9 +16,9 @@ test('rule does not exist', function () {
     ])->toArray());
 
     expect(fn () => PanicControl::check($panic['name']))->toThrow(\PanicControl\Exceptions\PanicControlRuleDoesNotExist::class);
-});
+})->with('stores');
 
-test('multi rules', function () {
+test('multi rules', function (string $storeName, null $store) {
     $this->get('http://localhost/url-path-test');
     \Illuminate\Support\Facades\Route::shouldReceive('currentRouteName')->andReturn('route-name-test');
 
@@ -104,9 +104,9 @@ test('multi rules', function () {
         ],
     ])->toArray());
     expect(PanicControl::check($panic['name']))->toBeFalse();
-});
+})->with('stores');
 
-test('rule route name', function () {
+test('rule route name', function (string $storeName, null $store) {
     \Illuminate\Support\Facades\Route::shouldReceive('currentRouteName')->andReturn('route-name-test');
 
     // Route Name exists but Panic Control is disabled
@@ -159,9 +159,9 @@ test('rule route name', function () {
         ],
     ])->toArray());
     expect(PanicControl::check($panic['name']))->toBeTrue();
-});
+})->with('stores');
 
-test('rule url path', function () {
+test('rule url path', function (string $storeName, null $store) {
     $this->get('http://localhost/url-path-test');
 
     // Url Path exists but Panic Control is disabled
@@ -214,9 +214,9 @@ test('rule url path', function () {
         ],
     ])->toArray());
     expect(PanicControl::check($panic['name']))->toBeTrue();
-});
+})->with('stores');
 
-test('rule user sampling', function () {
+test('rule user sampling', function (string $storeName, null $store) {
     // Sampling exists but Panic Control is disabled
     $panic = PanicControl::create(PanicControlModel::factory()->make([
         'status' => false,
@@ -294,9 +294,9 @@ test('rule user sampling', function () {
     for ($i = 0; $i < 10; $i++) {
         expect(PanicControl::check($panic['name']))->toBe($chance);
     }
-});
+})->with('stores');
 
-test('rule user', function () {
+test('rule user', function (string $storeName, null $store) {
     // Panic Control is enabled and the user is not logged in
     $panic = PanicControl::create(PanicControlModel::factory()->make([
         'status' => true,
@@ -385,4 +385,4 @@ test('rule user', function () {
         ],
     ])->toArray());
     expect(PanicControl::check($panic['name']))->toBeTrue();
-});
+})->with('stores');
