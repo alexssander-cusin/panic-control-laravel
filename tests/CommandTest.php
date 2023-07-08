@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
-test('show all panic control on command', function () {
+test('show all panic control on command', function (string $storeName, null $store) {
     $panics = PanicControlModel::factory()->count(3)->make()->toArray();
     foreach ($panics as $panic) {
         PanicControl::create($panic);
@@ -20,9 +20,9 @@ test('show all panic control on command', function () {
         ->expectsOutputToContain($panics[2]['name'])
         ->assertExitCode(Command::SUCCESS);
 
-});
+})->with('stores');
 
-test('show details a panic control on command', function () {
+test('show details a panic control on command', function (string $storeName, null $store) {
     $panic = PanicControl::create(PanicControlModel::factory()->make([
         'name' => 'test',
     ])->toArray());
@@ -34,9 +34,9 @@ test('show details a panic control on command', function () {
     $this->artisan('panic-control:show', ['name' => 'not-found'])
         ->expectsOutput('Panic Control não encontrado.')
         ->assertExitCode(Command::FAILURE);
-});
+})->with('stores');
 
-test('active a panic control on command', function () {
+test('active a panic control on command', function (string $storeName, null $store) {
     $panic = PanicControl::create(PanicControlModel::factory()->make([
         'status' => false,
     ])->toArray());
@@ -48,9 +48,9 @@ test('active a panic control on command', function () {
         ->assertExitCode(Command::SUCCESS);
 
     expect(PanicControl::check($panic['name']))->toBeTrue();
-});
+})->with('stores');
 
-test('deactive a panic control on command', function () {
+test('deactive a panic control on command', function (string $storeName, null $store) {
     $panic = PanicControl::create(PanicControlModel::factory()->make([
         'status' => true,
     ])->toArray());
@@ -62,4 +62,4 @@ test('deactive a panic control on command', function () {
         ->assertExitCode(Command::SUCCESS);
 
     expect(PanicControl::check($panic['name']))->toBeFalse();
-});
+})->with('stores');
