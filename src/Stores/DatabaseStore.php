@@ -22,6 +22,7 @@ final class DatabaseStore implements Store
             'name' => 'required|unique:'.config('panic-control.stores.database.table').'|max:255',
             'description' => 'max:255',
             'status' => 'boolean',
+            'rules' => 'array',
         ]);
 
         if ($validator->fails()) {
