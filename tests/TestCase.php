@@ -34,4 +34,11 @@ class TestCase extends Orchestra
         $migration = include __DIR__.'/../database/migrations/create_panic_control_table.php.stub';
         $migration->up();
     }
+
+    public function assertPanicControlHas($panic)
+    {
+        match (config('panic-control.default')) {
+            'database' => $this->assertDatabaseHas(config('panic-control.stores.database.table'), $panic),
+        };
+    }
 }

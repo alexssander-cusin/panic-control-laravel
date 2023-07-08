@@ -5,7 +5,7 @@ use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
-test('Create a Panic Control by facade', function () {
+test('Create a Panic Control by facade', function (string $test, null $store) {
     $count = PanicControl::count();
 
     $panic = [
@@ -22,10 +22,12 @@ test('Create a Panic Control by facade', function () {
     expect($panicControl['description'])->toBe($panic['description']);
     expect($panicControl['status'])->toBe($panic['status']);
 
-    $this->assertDatabaseHas(config('panic-control.stores.database.table'), $panic);
-
     expect(PanicControl::count())->toBe($count + 1);
-});
+
+    $this->assertPanicControlHas($panic);
+})->with([
+    ['store.database', fn () => config()->set('panic-control.default', 'database')],
+]);
 
 test('Failed to create Panic with wrong parameters', function (string $test, array $parameters) {
     if ($test == 'name.notUnique') {
