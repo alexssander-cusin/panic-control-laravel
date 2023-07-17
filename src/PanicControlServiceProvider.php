@@ -24,6 +24,7 @@ class PanicControlServiceProvider extends PackageServiceProvider
                 \PanicControl\Commands\PanicControlListCommand::class,
                 \PanicControl\Commands\PanicControlActiveCommand::class,
                 \PanicControl\Commands\PanicControlDesactiveCommand::class,
+                \PanicControl\Commands\PanicControlCreateFileCommand::class,
             ]);
     }
 }

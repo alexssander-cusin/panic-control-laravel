@@ -5,6 +5,7 @@
  */
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
@@ -62,4 +63,23 @@ test('deactive a panic control on command', function (string $storeName, null $s
         ->assertExitCode(Command::SUCCESS);
 
     expect(PanicControl::check($panic['name']))->toBeFalse();
+})->with('stores');
+
+test('create file when not exists and the store set file', function (string $storeName, null $store) {
+
+    Storage::disk(config('panic-control.stores.file.disk'))->delete(config('panic-control.stores.file.path'));
+
+    if ($storeName === 'store.file') {
+        $this->artisan('panic-control:create-file')
+            ->expectsOutput('Arquivo criado com sucesso.')
+            ->assertExitCode(Command::SUCCESS);
+
+        expect(Storage::disk(config('panic-control.stores.file.disk'))->exists(config('panic-control.stores.file.path')))->toBeTrue();
+    } else {
+        $this->artisan('panic-control:create-file')
+            ->expectsOutput('O store configurado não é do tipo FILE.')
+            ->assertExitCode(Command::FAILURE);
+
+        expect(Storage::disk(config('panic-control.stores.file.disk'))->exists(config('panic-control.stores.file.path')))->toBeFalse();
+    }
 })->with('stores');
