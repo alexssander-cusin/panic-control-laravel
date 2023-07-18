@@ -2,11 +2,14 @@
 
 namespace PanicControl;
 
+use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use PanicControl\Contracts\Store;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlRuleDoesNotExist;
+use PanicControl\Validations\UniqueNameRule;
 
 class PanicControl
 {
@@ -87,6 +90,22 @@ class PanicControl
 
     public function create(array $parameters): array
     {
+        $validator = Validator::make($parameters, [
+            'name' => [
+                'required',
+                'max:255',
+                new UniqueNameRule,
+            ],
+            'description' => 'max:255',
+            'status' => 'boolean',
+            'rules' => 'array',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Campos inválidos.', $validator->errors()->all());
+            throw new Exception('Campos inválidos.');
+        }
+
         $panic = $this->store->create($parameters);
 
         $this->clear();
@@ -96,6 +115,21 @@ class PanicControl
 
     public function update(string|int $panic, array $parameters): array
     {
+        $validator = Validator::make($parameters, [
+            'name' => [
+                'required',
+                'max:255',
+                new UniqueNameRule($panic),
+            ],
+            'description' => 'max:255',
+            'status' => 'boolean',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Campos inválidos.', $validator->errors()->all());
+            throw new Exception('Campos inválidos.');
+        }
+
         $panic = $this->store->update($panic, $parameters);
 
         $this->clear();

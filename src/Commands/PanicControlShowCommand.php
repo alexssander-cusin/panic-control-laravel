@@ -3,7 +3,8 @@
 namespace PanicControl\Commands;
 
 use Illuminate\Console\Command;
-use PanicControl\Models\PanicControl as PanicControlModel;
+use PanicControl\Exceptions\PanicControlDoesNotExist;
+use PanicControl\Facades\PanicControl;
 
 class PanicControlShowCommand extends Command
 {
@@ -13,15 +14,15 @@ class PanicControlShowCommand extends Command
 
     public function handle(): int
     {
-        $panic = PanicControlModel::where('name', $this->argument('name'))->first();
-
-        if (! $panic) {
-            $this->error('Panic Control não encontrado.');
+        try {
+            $panic = PanicControl::find($this->argument('name'));
+        } catch (PanicControlDoesNotExist $th) {
+            $this->error($th->getMessage());
 
             return self::FAILURE;
         }
 
-        foreach ($panic->toArray() as $key => $value) {
+        foreach ($panic as $key => $value) {
             $this->info($key.': '.$value);
         }
 

@@ -33,7 +33,7 @@ test('show details a panic control on command', function (string $storeName, nul
         ->assertExitCode(Command::SUCCESS);
 
     $this->artisan('panic-control:show', ['name' => 'not-found'])
-        ->expectsOutput('Panic Control não encontrado.')
+        ->expectsOutput('Panic Control: not-found does not exist.')
         ->assertExitCode(Command::FAILURE);
 })->with('stores');
 
@@ -59,7 +59,7 @@ test('deactive a panic control on command', function (string $storeName, null $s
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     $this->artisan('panic-control:desactive', ['name' => $panic['name']])
-        ->expectsOutput('Panic Control desativado com sucesso.')
+        ->expectsOutput("Panic Control: {$panic['name']} desativado com sucesso.")
         ->assertExitCode(Command::SUCCESS);
 
     expect(PanicControl::check($panic['name']))->toBeFalse();

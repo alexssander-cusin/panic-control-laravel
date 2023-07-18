@@ -29,6 +29,7 @@ test('Create a Panic Control by facade', function (string $storeName, null $stor
 
 test('Failed to create Panic with wrong parameters', function (string $storeName, null $store, string $test, array $parameters) {
     if ($test == 'name.notUnique') {
+        PanicControl::create($parameters);
         $parameters = PanicControlModel::factory()->make(['name' => $parameters['name']])->toArray();
     }
 
@@ -41,7 +42,7 @@ test('Failed to create Panic with wrong parameters', function (string $storeName
     expect(PanicControl::count())->toBe($count);
 })->with('stores')->with([
     ['name.empty', fn () => PanicControlModel::factory()->make(['name' => ''])->toArray()],
-    ['name.notUnique', fn () => PanicControlModel::factory()->create()->toArray()],
+    ['name.notUnique', fn () => PanicControlModel::factory()->make()->toArray()],
     ['name.max:264', fn () => PanicControlModel::factory()->make(['name' => 'namenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamename'])->toArray()],
     ['description.max:264', fn () => PanicControlModel::factory()->make(['description' => 'descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription'])->toArray()],
     ['status.string', ['name' => 'name', 'description' => 'description', 'status' => 'disabled']],

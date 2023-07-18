@@ -3,7 +3,7 @@
 namespace PanicControl\Commands;
 
 use Illuminate\Console\Command;
-use PanicControl\Models\PanicControl as PanicControlModel;
+use PanicControl\Facades\PanicControl;
 
 class PanicControlDesactiveCommand extends Command
 {
@@ -13,19 +13,24 @@ class PanicControlDesactiveCommand extends Command
 
     public function handle(): int
     {
-        $panic = PanicControlModel::where('name', $this->argument('name'))->first();
+        $panic = $this->argument('name');
+        $panics = PanicControl::all();
+        $updated = false;
 
-        if (! $panic) {
-            $this->error('Panic Control não encontrado.');
+        foreach ($panics as $key => $value) {
+            if ($panic == $key) {
+                $updated = PanicControl::update($key, ['status' => false] + $value);
+                break;
+            }
+        }
+
+        if (! $updated) {
+            $this->error("Panic Control: {$panic} não encontrado.");
 
             return self::FAILURE;
         }
 
-        $panic->update([
-            'status' => false,
-        ]);
-
-        $this->info('Panic Control desativado com sucesso.');
+        $this->info("Panic Control: {$panic} desativado com sucesso.");
 
         return self::SUCCESS;
     }
