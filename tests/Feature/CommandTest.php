@@ -8,13 +8,23 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
+use Pest\Panic;
 
 test('show all panic control on command', function (string $storeName, null $store) {
+    //Test empty panic control
+    match ($storeName) {
+        'store.database' => PanicControlModel::truncate(),
+    };
+    PanicControl::clear();
+    $this->artisan('panic-control:list')
+        ->expectsOutputToContain('Nenhum Panic Control encontrado.')
+        ->assertExitCode(Command::FAILURE);
+
+    //List all panic control
     $panics = PanicControlModel::factory()->count(3)->make()->toArray();
     foreach ($panics as $panic) {
         PanicControl::create($panic);
     }
-
     $this->artisan('panic-control:list')
         ->expectsOutputToContain($panics[0]['name'])
         ->expectsOutputToContain($panics[1]['name'])
@@ -45,7 +55,7 @@ test('active a panic control on command', function (string $storeName, null $sto
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     $this->artisan('panic-control:active', ['name' => $panic['name']])
-        ->expectsOutput('Panic Control ativado com sucesso.')
+        ->expectsOutput("Panic Control: {$panic['name']} ativado com sucesso.")
         ->assertExitCode(Command::SUCCESS);
 
     expect(PanicControl::check($panic['name']))->toBeTrue();

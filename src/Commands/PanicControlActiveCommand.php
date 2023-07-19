@@ -3,7 +3,8 @@
 namespace PanicControl\Commands;
 
 use Illuminate\Console\Command;
-use PanicControl\Models\PanicControl as PanicControlModel;
+use PanicControl\Exceptions\PanicControlDoesNotExist;
+use PanicControl\Facades\PanicControl;
 
 class PanicControlActiveCommand extends Command
 {
@@ -13,19 +14,19 @@ class PanicControlActiveCommand extends Command
 
     public function handle(): int
     {
-        $panic = PanicControlModel::where('name', $this->argument('name'))->first();
+        $panicName = $this->argument('name');
 
-        if (! $panic) {
-            $this->error('Panic Control não encontrado.');
+        try {
+            $panic = PanicControl::find($panicName);
+        } catch (PanicControlDoesNotExist $th) {
+            $this->error("Panic Control: {$panic} não encontrado.");
 
             return self::FAILURE;
         }
 
-        $panic->update([
-            'status' => true,
-        ]);
+        PanicControl::update($panicName, ['status' => true] + $panic);
 
-        $this->info('Panic Control ativado com sucesso.');
+        $this->info("Panic Control: {$panicName} ativado com sucesso.");
 
         return self::SUCCESS;
     }

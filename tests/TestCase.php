@@ -39,6 +39,7 @@ class TestCase extends Orchestra
     {
         match (config('panic-control.default')) {
             'database' => $this->assertDatabaseHas(config('panic-control.stores.database.table'), $parameters),
+            default => throw new \Exception('Invalid store provided'),
         };
     }
 
@@ -46,6 +47,7 @@ class TestCase extends Orchestra
     {
         match (config('panic-control.default')) {
             'database' => $this->assertDatabaseMissing(config('panic-control.stores.database.table'), $parameters),
+            default => throw new \Exception('Invalid store provided'),
         };
     }
 }

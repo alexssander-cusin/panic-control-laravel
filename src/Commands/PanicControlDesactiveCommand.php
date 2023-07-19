@@ -13,24 +13,19 @@ class PanicControlDesactiveCommand extends Command
 
     public function handle(): int
     {
-        $panic = $this->argument('name');
-        $panics = PanicControl::all();
-        $updated = false;
+        $panicName = $this->argument('name');
 
-        foreach ($panics as $key => $value) {
-            if ($panic == $key) {
-                $updated = PanicControl::update($key, ['status' => false] + $value);
-                break;
-            }
-        }
-
-        if (! $updated) {
+        try {
+            $panic = PanicControl::find($panicName);
+        } catch (PanicControlDoesNotExist $th) {
             $this->error("Panic Control: {$panic} não encontrado.");
 
             return self::FAILURE;
         }
 
-        $this->info("Panic Control: {$panic} desativado com sucesso.");
+        PanicControl::update($panicName, ['status' => false] + $panic);
+
+        $this->info("Panic Control: {$panicName} desativado com sucesso.");
 
         return self::SUCCESS;
     }

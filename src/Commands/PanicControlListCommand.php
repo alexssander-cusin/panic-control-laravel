@@ -3,7 +3,7 @@
 namespace PanicControl\Commands;
 
 use Illuminate\Console\Command;
-use PanicControl\Models\PanicControl as PanicControlModel;
+use PanicControl\Facades\PanicControl;
 use Symfony\Component\Console\Helper\Table;
 
 class PanicControlListCommand extends Command
@@ -14,9 +14,9 @@ class PanicControlListCommand extends Command
 
     public function handle(): int
     {
-        $panic = PanicControlModel::all(['name', 'status', 'description']);
+        $panic = PanicControl::all();
 
-        if (! $panic) {
+        if (empty($panic)) {
             $this->error('Nenhum Panic Control encontrado.');
 
             return self::FAILURE;
@@ -30,9 +30,9 @@ class PanicControlListCommand extends Command
 
         foreach ($panic as $key => $value) {
             $table->addRow([
-                $value->name,
-                $value->status ? '<bg=green>Active</>' : '<bg=red>Inactive</>',
-                $value->description,
+                $value['name'],
+                $value['status'] ? '<bg=green>Active</>' : '<bg=red>Inactive</>',
+                $value['description'],
             ]);
         }
 
