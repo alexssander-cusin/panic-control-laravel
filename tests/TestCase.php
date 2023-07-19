@@ -3,9 +3,10 @@
 namespace PanicControl\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 use Orchestra\Testbench\TestCase as Orchestra;
+use PanicControl\Facades\PanicControl;
 use PanicControl\PanicControlServiceProvider;
-use PanicControl\Providers\StoreServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -22,7 +23,6 @@ class TestCase extends Orchestra
     {
         return [
             PanicControlServiceProvider::class,
-            StoreServiceProvider::class,
         ];
     }
 
@@ -39,6 +39,16 @@ class TestCase extends Orchestra
     {
         match (config('panic-control.default')) {
             'database' => $this->assertDatabaseHas(config('panic-control.stores.database.table'), $parameters),
+            'file' => count(Arr::where(PanicControl::all(), function (array $value, int|string $key) use ($parameters) {
+                $return = true;
+                foreach ($parameters as $k => $v) {
+                    if ($value[$k] != $v) {
+                        $return = false;
+                    }
+                }
+
+                return $return;
+            })) > 0,
             default => throw new \Exception('Invalid store provided'),
         };
     }
@@ -47,6 +57,16 @@ class TestCase extends Orchestra
     {
         match (config('panic-control.default')) {
             'database' => $this->assertDatabaseMissing(config('panic-control.stores.database.table'), $parameters),
+            'file' => count(Arr::where(PanicControl::all(), function (array $value, int|string $key) use ($parameters) {
+                $return = true;
+                foreach ($parameters as $k => $v) {
+                    if ($value[$k] != $v) {
+                        $return = false;
+                    }
+                }
+
+                return $return;
+            })) == 0,
             default => throw new \Exception('Invalid store provided'),
         };
     }

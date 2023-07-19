@@ -8,12 +8,12 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
-use Pest\Panic;
 
 test('show all panic control on command', function (string $storeName, null $store) {
     //Test empty panic control
     match ($storeName) {
         'store.database' => PanicControlModel::truncate(),
+        'store.file' => Storage::disk(config('panic-control.stores.file.disk'))->put(config('panic-control.stores.file.path'), json_encode([])),
     };
     PanicControl::clear();
     $this->artisan('panic-control:list')

@@ -33,5 +33,13 @@ class UniqueNameRule implements ValidationRule
             $fail('The panic control name exists.');
         }
 
+        if (config('panic-control.default') == 'file') {
+            try {
+                PanicControl::find($value);
+            } catch (PanicControlDoesNotExist $th) {
+                return;
+            }
+            $fail('The panic control name exists.');
+        }
     }
 }
