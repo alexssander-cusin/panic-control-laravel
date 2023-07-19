@@ -99,3 +99,16 @@ test('detail a Panic Control by facade', function (string $storeName, null $stor
 
     expect(PanicControl::find($panic['name']))->toMatchArray($panic);
 })->with('stores');
+
+test('count Panic Controls by facade', function (string $storeName, null $store) {
+    expect(PanicControl::count())->toBeInt()->toBe(0);
+
+    PanicControl::create(PanicControlModel::factory()->make()->toArray());
+    expect(PanicControl::count())->toBeInt()->toBe(1);
+
+    PanicControl::create(PanicControlModel::factory()->make()->toArray());
+    expect(PanicControl::count())->toBeInt()->toBe(2);
+
+    PanicControl::create(PanicControlModel::factory()->make()->toArray());
+    expect(PanicControl::count())->toBeInt()->toBe(3);
+})->with('stores');
