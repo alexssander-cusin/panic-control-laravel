@@ -93,6 +93,7 @@ class PanicControl
         $validator = Validator::make($parameters, [
             'name' => [
                 'required',
+                'string',
                 'max:255',
                 new UniqueNameRule,
             ],
@@ -117,7 +118,7 @@ class PanicControl
     {
         $validator = Validator::make($parameters, [
             'name' => [
-                'required',
+                'string',
                 'max:255',
                 new UniqueNameRule($panic),
             ],
