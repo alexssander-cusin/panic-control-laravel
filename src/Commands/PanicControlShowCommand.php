@@ -23,6 +23,9 @@ class PanicControlShowCommand extends Command
         }
 
         foreach ($panic as $key => $value) {
+            if (is_array($value)) {
+                $value = json_encode($value);
+            }
             $this->info($key.': '.$value);
         }
 
