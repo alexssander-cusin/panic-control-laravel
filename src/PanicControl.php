@@ -47,6 +47,12 @@ class PanicControl
         return $this->getCacheControl($panic);
     }
 
+    /**
+     * Create with Panic Control is active
+     *
+     * @param  string  $panic
+     * @return bool
+     */
     public function check(string $panic): bool
     {
         try {
@@ -73,9 +79,6 @@ class PanicControl
                         'panic' => $panic,
                     ])->rule($parameters);
                 } catch (\Throwable $th) {
-                    // if (app()->environment('testing')) {
-                    //     throw $th;
-                    // }
                     throw new PanicControlRuleDoesNotExist($rule);
                 }
 

@@ -3,6 +3,7 @@
 namespace PanicControl\Commands;
 
 use Illuminate\Console\Command;
+use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Facades\PanicControl;
 
 class PanicControlDesactiveCommand extends Command
@@ -18,7 +19,7 @@ class PanicControlDesactiveCommand extends Command
         try {
             $panic = PanicControl::find($panicName);
         } catch (PanicControlDoesNotExist $th) {
-            $this->error("Panic Control: {$panic} não encontrado.");
+            $this->error("Panic Control: {$panicName} não encontrado.");
 
             return self::FAILURE;
         }
