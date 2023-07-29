@@ -49,9 +49,6 @@ class PanicControl
 
     /**
      * Create with Panic Control is active
-     *
-     * @param  string  $panic
-     * @return bool
      */
     public function check(string $panic): bool
     {
