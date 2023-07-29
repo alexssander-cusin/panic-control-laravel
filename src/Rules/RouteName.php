@@ -7,7 +7,7 @@ use PanicControl\Contracts\Rule as RuleContract;
 
 class RouteName extends Rule implements RuleContract
 {
-    public function rule(array $parameters): bool|null
+    public function rule(array $parameters): ?bool
     {
         foreach ($parameters as $parameter) {
             if (Route::currentRouteName() === $parameter) {

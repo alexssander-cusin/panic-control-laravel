@@ -8,7 +8,7 @@ use PanicControl\Contracts\Rule as RuleContract;
 
 class Sampling extends Rule implements RuleContract
 {
-    public function rule(array $parameters): bool|null
+    public function rule(array $parameters): ?bool
     {
         $sessionName = "panic-control.{$this->panic['name']}.sampling";
 

@@ -7,7 +7,7 @@ use PanicControl\Contracts\Rule as RuleContract;
 
 class UrlPath extends Rule implements RuleContract
 {
-    public function rule(array $parameters): bool|null
+    public function rule(array $parameters): ?bool
     {
         foreach ($parameters as $parameter) {
             if (Request::path() === $parameter) {

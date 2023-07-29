@@ -4,5 +4,5 @@ namespace PanicControl\Contracts;
 
 interface Rule
 {
-    public function rule(array $parameters): bool|null;
+    public function rule(array $parameters): ?bool;
 }

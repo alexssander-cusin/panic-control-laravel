@@ -7,7 +7,7 @@ use PanicControl\Contracts\Rule as RuleContract;
 
 class User extends Rule implements RuleContract
 {
-    public function rule(array $parameters): bool|null
+    public function rule(array $parameters): ?bool
     {
         if (
             Auth::check() &&
