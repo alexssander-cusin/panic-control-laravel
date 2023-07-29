@@ -11,6 +11,8 @@ dataset('stores', [
         'store.database', function () {
             config()->set('panic-control.default', 'database');
             $this->app->bind(Store::class, DatabaseStore::class);
+
+            return true;
         },
     ],
     [
@@ -20,6 +22,8 @@ dataset('stores', [
             Storage::disk(config('panic-control.stores.file.disk'))->delete(config('panic-control.stores.file.path'));
             Storage::disk(config('panic-control.stores.file.disk'))->put(config('panic-control.stores.file.path'), json_encode([]));
             PanicControl::clear();
+
+            return true;
         },
     ],
 ]);

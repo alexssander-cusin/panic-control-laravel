@@ -5,7 +5,7 @@ use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
-test('Create a Panic Control by facade', function (string $storeName, null $store) {
+test('Create a Panic Control by facade', function (string $storeName, bool $store) {
     $count = PanicControl::count();
 
     $panic = [
@@ -27,7 +27,7 @@ test('Create a Panic Control by facade', function (string $storeName, null $stor
     $this->assertPanicControlHas($panic);
 })->with('stores');
 
-test('Failed to create Panic with wrong parameters', function (string $storeName, null $store, string $test, array $parameters) {
+test('Failed to create Panic with wrong parameters', function (string $storeName, bool $store, string $test, array $parameters) {
     if ($test == 'name.notUnique') {
         PanicControl::create($parameters);
         $parameters = PanicControlModel::factory()->make(['name' => $parameters['name']])->toArray();
@@ -48,7 +48,7 @@ test('Failed to create Panic with wrong parameters', function (string $storeName
     ['status.string', ['name' => 'name', 'description' => 'description', 'status' => 'disabled']],
 ]);
 
-test('update a Panic Control by facade from panic name', function (string $storeName, null $store, $key, $value) {
+test('update a Panic Control by facade from panic name', function (string $storeName, bool $store, $key, $value) {
     $panic = PanicControl::create(PanicControlModel::factory()->make()->toArray());
 
     $newPanic = PanicControl::update($panic['name'], [$key => $value]);
@@ -62,7 +62,7 @@ test('update a Panic Control by facade from panic name', function (string $store
     ['status', true],
 ]);
 
-test('check status a Panic Control by facade', function (string $storeName, null $store) {
+test('check status a Panic Control by facade', function (string $storeName, bool $store) {
     //Check status TRUE
     $panic = PanicControl::create(PanicControlModel::factory()->make([
         'status' => true,
@@ -84,7 +84,7 @@ test('check status a Panic Control by facade', function (string $storeName, null
     expect(fn () => PanicControl::check('panic-not-found'))->toThrow(PanicControlDoesNotExist::class);
 })->with('stores');
 
-test('list all Panic Control by facade', function (string $storeName, null $store) {
+test('list all Panic Control by facade', function (string $storeName, bool $store) {
     $panics = PanicControlModel::factory()->count(3)->make()->toArray();
 
     foreach ($panics as $panic) {
@@ -94,13 +94,13 @@ test('list all Panic Control by facade', function (string $storeName, null $stor
     expect(PanicControl::all())->toHaveCount(3);
 })->with('stores');
 
-test('detail a Panic Control by facade', function (string $storeName, null $store) {
+test('detail a Panic Control by facade', function (string $storeName, bool $store) {
     $panic = PanicControl::create(PanicControlModel::factory()->make()->toArray());
 
     expect(PanicControl::find($panic['name']))->toMatchArray($panic);
 })->with('stores');
 
-test('count Panic Controls by facade', function (string $storeName, null $store) {
+test('count Panic Controls by facade', function (string $storeName, bool $store) {
     expect(PanicControl::count())->toBeInt()->toBe(0);
 
     PanicControl::create(PanicControlModel::factory()->make()->toArray());

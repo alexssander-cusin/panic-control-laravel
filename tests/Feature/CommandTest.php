@@ -9,7 +9,12 @@ use Illuminate\Support\Facades\Storage;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
-test('show all panic control on command', function (string $storeName, null $store) {
+beforeEach(function () {
+    //
+});
+
+test('show all panic control on command', function (string $storeName, bool $store) {
+
     //Test empty panic control
     match ($storeName) {
         'store.database' => PanicControlModel::truncate(),
@@ -33,7 +38,7 @@ test('show all panic control on command', function (string $storeName, null $sto
 
 })->with('stores');
 
-test('show details a panic control on command', function (string $storeName, null $store) {
+test('show details a panic control on command', function (string $storeName, bool $store) {
     $panic = PanicControl::create(PanicControlModel::factory()->make([
         'name' => 'test',
     ])->toArray());
@@ -47,7 +52,7 @@ test('show details a panic control on command', function (string $storeName, nul
         ->assertExitCode(Command::FAILURE);
 })->with('stores');
 
-test('active a panic control on command', function (string $storeName, null $store) {
+test('active a panic control on command', function (string $storeName, bool $store) {
     $panic = PanicControl::create(PanicControlModel::factory()->make([
         'status' => false,
     ])->toArray());
@@ -61,7 +66,7 @@ test('active a panic control on command', function (string $storeName, null $sto
     expect(PanicControl::check($panic['name']))->toBeTrue();
 })->with('stores');
 
-test('deactive a panic control on command', function (string $storeName, null $store) {
+test('deactive a panic control on command', function (string $storeName, bool $store) {
     $panic = PanicControl::create(PanicControlModel::factory()->make([
         'status' => true,
     ])->toArray());
@@ -75,7 +80,7 @@ test('deactive a panic control on command', function (string $storeName, null $s
     expect(PanicControl::check($panic['name']))->toBeFalse();
 })->with('stores');
 
-test('create file when not exists and the store set file', function (string $storeName, null $store) {
+test('create file when not exists and the store set file', function (string $storeName, bool $store) {
 
     Storage::disk(config('panic-control.stores.file.disk'))->delete(config('panic-control.stores.file.path'));
 
