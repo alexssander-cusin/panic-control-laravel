@@ -145,7 +145,12 @@ class PanicControl
 
     public function clear()
     {
-        Cache::forget(config('panic-control.cache.name'));
+        $cache = config('panic-control.cache');
+
+        if ($cache['enabled']) {
+            Cache::store($cache['store'])->forget($cache['key']);
+        }
+
         self::$list = [];
     }
 }
