@@ -25,7 +25,7 @@ class PanicControl
         $cache = config('panic-control.cache');
         if (! self::$list) {
             $cacheStore = $cache['enabled'] ? $cache['store'] : 'array';
-            self::$list = Cache::store($cacheStore)->remember($cache['key'], $cache['time'], function () {
+            self::$list = Cache::store($cacheStore)->remember($cache['key'], $cache['ttl'], function () {
                 return $this->store->all();
             });
         }
@@ -145,7 +145,12 @@ class PanicControl
 
     public function clear()
     {
-        Cache::forget(config('panic-control.cache.name'));
+        $cache = config('panic-control.cache');
+
+        if ($cache['enabled']) {
+            Cache::store($cache['store'])->forget($cache['key']);
+        }
+
         self::$list = [];
     }
 }

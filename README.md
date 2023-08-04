@@ -29,15 +29,94 @@ This are the contents of the published config file:
 
 ```php
 return [
-    'database' => [
-        'table' => 'panic_controls',
+    /** 
+     *--------------------------------------------------------------------------
+     * Set up what store will be used
+     *--------------------------------------------------------------------------
+    */
+    
+    'default' => 'database',
+    
+    'stores' => [
+        'database' => [
+            /** 
+             *--------------------------------------------------------------------------
+             * Define the table name will be created in database
+             *--------------------------------------------------------------------------
+            */
+            
+            'table' => 'panic_controls',
+        ],
+        'file' => [
+            /** 
+             *--------------------------------------------------------------------------
+             * Defines which registered disk
+             *--------------------------------------------------------------------------
+             * The storage listed in /config/filesystem.php should be used
+             * 
+             * Supported Drivers: "local", "ftp", "sftp", "s3"
+            */
+            
+            'disk' => config('filesystems.default'),
+            
+            /** 
+             *--------------------------------------------------------------------------
+             * Defines the name of the file that will be created
+             *--------------------------------------------------------------------------
+            */
+            
+            'path' => 'panic-control.json',
+        ],
     ],
     'cache' => [
-        'enabled' => env('PANIC_CACHE_ENABLED', true),
+        /** 
+         *--------------------------------------------------------------------------
+         * Activates the cache usage for the panic controls
+         *--------------------------------------------------------------------------
+        */
+        
+        'enabled' => true,
+        
+        /** 
+         *--------------------------------------------------------------------------
+         * Defines what cache store should be used
+         *--------------------------------------------------------------------------
+         * The storage listed in /config/cache.php should be used
+         * 
+         * Supported drivers: "apc", "array", "database", "file",
+         *      "memcached", "redis", "dynamodb", "octane", "null"
+        */
+        
         'store' => env('CACHE_DRIVER', 'file'),
+
+        /**
+         *--------------------------------------------------------------------------
+         * Cache Key Prefix
+         *--------------------------------------------------------------------------
+         *
+         * When utilizing the APC, database, memcached, Redis, or DynamoDB cache
+         * stores there might be other applications using the same cache. For
+         * that reason, you may prefix every cache key to avoid collisions.
+         *
+        */
+
         'key' => 'panic-control',
-        'time' => 60,
+
+        /**
+         *--------------------------------------------------------------------------
+         * Sets the time the cache will expire
+         *--------------------------------------------------------------------------
+        */
+
+        'ttl' => 60,
     ],
+
+    /**
+     *--------------------------------------------------------------------------
+     * List custom rules
+     *--------------------------------------------------------------------------
+    */
+
     'rules' => [
         'route-name' => PanicControl\Rules\RouteName::class,
         'url-path' => PanicControl\Rules\UrlPath::class,
@@ -270,9 +349,10 @@ composer test
 
 ## TODO
 
-- [ ] Verify clear cache on Model
 - [ ] Update Documentation
+- [ ] Support LINK Store
 - [ ] Support Panic Control category
+- [ ] Verify clear cache on Model
 
 ## Changelog
 
