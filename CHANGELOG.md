@@ -2,10 +2,12 @@
 
 All notable changes to `alexssander-cusin/panic-control-laravel` will be documented in this file.
 
+## v1.1.0 - 2023-07-04
+- Support File Store
 ## v1.0.0 - 2023-05-26
 
-- Create Panic Control with [Facade];
-- Update Panic Control with [Facade];
+- Create Panic Control with [Facade]/[Command]/[Helper];
+- Update Panic Control with [Facade]/[Command]/[Helper];
 - Check Panic Control with [Facade]/[Command]/[Helper];
 - [Supplementary rules support](https://github.com/alexssander-cusin/panic-control-laravel#rules);
 - Rule: [Route Name](https://github.com/alexssander-cusin/panic-control-laravel#route-name);

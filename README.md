@@ -349,10 +349,8 @@ composer test
 
 ## TODO
 
-- [ ] Update Documentation
 - [ ] Support LINK Store
 - [ ] Support Panic Control category
-- [ ] Verify clear cache on Model
 
 ## Changelog
 
