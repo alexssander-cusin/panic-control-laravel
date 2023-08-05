@@ -347,11 +347,6 @@ PanicControl::create([
 composer test
 ```
 
-## TODO
-
-- [ ] Support LINK Store
-- [ ] Support Panic Control category
-
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
