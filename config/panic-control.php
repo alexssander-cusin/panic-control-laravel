@@ -14,6 +14,14 @@ return [
         'database' => [
             /**
              *--------------------------------------------------------------------------
+             * Defines which registered connections
+             *--------------------------------------------------------------------------
+             * The storage listed in /config/database.php should be used
+             */
+            'connection' => config('database.default'),
+
+            /**
+             *--------------------------------------------------------------------------
              * Define the table name will be created in database
              *--------------------------------------------------------------------------
              */

@@ -32,6 +32,11 @@ class PanicControl extends Model
         return config('panic-control.stores.database.table');
     }
 
+    public function getConnectionName()
+    {
+        return config('panic-control.stores.database.connection');
+    }
+
     protected static function booted(): void
     {
         static::saved(function (PanicControl $panic) {

@@ -29,6 +29,7 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
+        config()->set('panic-control.stores.database.connection', 'testing');
         config()->set('panic-control.cache.time', 0);
 
         $migration = include __DIR__.'/../database/migrations/create_panic_control_table.php.stub';
