@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 use PanicControl\Contracts\Store;
 use PanicControl\Models\PanicControl;
 
-final class DatabaseStore implements Store
+class DatabaseStore implements Store
 {
     public function all(): array
     {

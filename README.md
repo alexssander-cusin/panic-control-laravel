@@ -76,14 +76,6 @@ return [
             
             'path' => 'panic-control.json',
         ],
-        'endpoint' => [
-            /**
-             *--------------------------------------------------------------------------
-             * Defines the URL of the endpoint
-             *--------------------------------------------------------------------------
-             */
-            'url' => 'https://localhost/panic-control.json',
-        ],
     ],
     'cache' => [
         /** 
@@ -147,7 +139,7 @@ return [
 
 ### Facade
 
-Create a Panic Control [^1]
+Create a Panic Control
 
 ```php
 use PanicControl\Facades\PanicControl;
@@ -159,7 +151,7 @@ PanicControl::create([
 ]);
 ```
 
-Update a Panic Control [^1]
+Update a Panic Control
 
 ```php
 use PanicControl\Facades\PanicControl;
@@ -214,13 +206,13 @@ Detail a Panic Control
 php artisan panic-control:show panic-control-name
 ```
 
-Activate a Panic Control [^1]
+Activate a Panic Control
 
 ```bash
 php artisan panic-control:active panic-control-name
 ```
 
-Deactivate a Panic Control [^1]
+Deactivate a Panic Control
 
 ```bash
 php artisan panic-control:desactive panic-control-name
@@ -380,5 +372,3 @@ Please review [our security policy](../../security/policy) on how to report secu
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-[^1]: Not supported for *endpoint store*.

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 use PanicControl\Contracts\Store;
 use PanicControl\Stores\DatabaseStore;
+use PanicControl\Stores\FileStore;
 
 class PanicControlServiceProvider extends ServiceProvider implements DeferrableProvider
 {
