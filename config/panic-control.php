@@ -45,6 +45,14 @@ return [
              */
             'path' => 'panic-control.json',
         ],
+        'endpoint' => [
+            /**
+             *--------------------------------------------------------------------------
+             * Defines the URL of the endpoint
+             *--------------------------------------------------------------------------
+             */
+            'url' => 'https://localhost/panic-control.json',
+        ],
     ],
     'cache' => [
         /**
