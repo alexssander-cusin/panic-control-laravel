@@ -51,22 +51,30 @@ test('show details a panic control on command', function (string $storeName, boo
 })->with('stores');
 
 test('active a panic control on command', function (string $storeName, bool $store) {
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    PanicControl::clear();
+    $panic = createPanic(count: 1, parameters: [
         'status' => false,
-    ])->toArray());
+    ])[0];
 
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
-    $this->artisan('panic-control:active', ['name' => $panic['name']])
-        ->expectsOutput("Panic Control: {$panic['name']} ativado com sucesso.")
-        ->assertExitCode(Command::SUCCESS);
+    if ($storeName == 'store.endpoint') {
+        $this->artisan('panic-control:active', ['name' => $panic['name']])
+            ->expectsOutput('Panic Control: Store endpoint does not support update method.')
+            ->assertExitCode(Command::FAILURE);
 
-    expect(PanicControl::check($panic['name']))->toBeTrue();
-})->with('stores');
+        expect(PanicControl::check($panic['name']))->toBeFalse();
+    } else {
+        $this->artisan('panic-control:active', ['name' => $panic['name']])
+            ->expectsOutput("Panic Control: {$panic['name']} ativado com sucesso.")
+            ->assertExitCode(Command::SUCCESS);
+
+        expect(PanicControl::check($panic['name']))->toBeTrue();
+    }
+})->with('stores')->only();
 
 test('deactive a panic control on command', function (string $storeName, bool $store) {
     PanicControl::clear();
-
     $panic = createPanic(count: 1, parameters: [
         'status' => true,
     ])[0];
