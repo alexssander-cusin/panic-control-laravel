@@ -15,6 +15,7 @@ test('show all panic control on command but list is empty', function (string $st
         'store.file' => Storage::disk(config('panic-control.stores.file.disk'))->put(config('panic-control.stores.file.path'), json_encode([])),
         'store.endpoint' => makeFakeEndpoint(response: [], status: 200),
     };
+    PanicControl::clear();
     $this->artisan('panic-control:list')
         ->expectsOutputToContain('Nenhum Panic Control encontrado.')
         ->assertExitCode(Command::FAILURE);
