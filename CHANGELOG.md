@@ -2,11 +2,14 @@
 
 All notable changes to `alexssander-cusin/panic-control-laravel` will be documented in this file.
 
-## v1.1.1 - 2023-07-06
+## v1.2.0 - 2023-XX-XX
+- [FEATURE] Add support ENDPOINT Store [#5](https://github.com/alexssander-cusin/panic-control-laravel/issues/5)
 - [FEATURE] Add support a database connections [#7](https://github.com/alexssander-cusin/panic-control-laravel/issues/7)
+- [FIXED] Importing PanicControl\Stores\FileStore on provider
 
 ## v1.1.0 - 2023-07-04
 - Support File Store
+
 ## v1.0.0 - 2023-05-26
 
 - Create Panic Control with [Facade]/[Command]/[Helper];

@@ -2,33 +2,53 @@
 
 use Illuminate\Support\Arr;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
+use PanicControl\Exceptions\PanicControlStoreNotSupport;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
 test('Create a Panic Control by facade', function (string $storeName, bool $store) {
-    $count = PanicControl::count();
+    try {
+        if ($storeName == 'store.endpoint') {
+            makeFakeEndpoint(response: [], status: 200);
+        }
 
-    $panic = [
-        'name' => 'panic-name',
-        'description' => 'panic-description',
-        'status' => true,
-    ];
+        $count = PanicControl::count();
 
-    $panicControl = PanicControl::create($panic);
+        $panic = [
+            'name' => 'panic-name',
+            'description' => 'panic-description',
+            'status' => true,
+        ];
 
-    expect($panicControl)->toBeArray();
+        $panicControl = PanicControl::create($panic);
 
-    expect($panicControl['name'])->toBe($panic['name']);
-    expect($panicControl['description'])->toBe($panic['description']);
-    expect($panicControl['status'])->toBe($panic['status']);
+        expect($panicControl)->toBeArray();
 
-    expect(PanicControl::count())->toBe($count + 1);
+        expect($panicControl['name'])->toBe($panic['name']);
+        expect($panicControl['description'])->toBe($panic['description']);
+        expect($panicControl['status'])->toBe($panic['status']);
 
-    $this->assertPanicControlHas($panic);
+        expect(PanicControl::count())->toBe($count + 1);
+
+        $this->assertPanicControlHas($panic);
+
+    } catch (\Throwable $th) {
+        if ($storeName == 'store.endpoint') {
+            expect(fn () => throw $th)->toThrow(PanicControlStoreNotSupport::class);
+
+            return;
+        } else {
+            throw $th;
+        }
+    }
 })->with('stores');
 
 test('Failed to create Panic with wrong parameters', function (string $storeName, bool $store, string $test, array $parameters) {
-    if ($test == 'name.notUnique') {
+    if ($storeName == 'store.endpoint') {
+        makeFakeEndpoint(response: [], status: 200);
+    }
+
+    if ($test == 'name.notUnique' && $storeName != 'store.endpoint') {
         PanicControl::create($parameters);
         $parameters = PanicControlModel::factory()->make(['name' => $parameters['name']])->toArray();
     }
@@ -49,13 +69,23 @@ test('Failed to create Panic with wrong parameters', function (string $storeName
 ]);
 
 test('update a Panic Control by facade from panic name', function (string $storeName, bool $store, $key, $value) {
-    $panic = PanicControl::create(PanicControlModel::factory()->make()->toArray());
+    try {
+        $panic = createPanic(count: 1)[0];
 
-    $newPanic = PanicControl::update($panic['name'], [$key => $value]);
+        $newPanic = PanicControl::update($panic['name'], [$key => $value]);
 
-    expect($newPanic)->toBeArray();
-    $this->assertPanicControlMissing($panic);
-    $this->assertPanicControlHas(Arr::only($newPanic, ['name', 'description', 'status']));
+        expect($newPanic)->toBeArray();
+        $this->assertPanicControlMissing($panic);
+        $this->assertPanicControlHas(Arr::only($newPanic, ['name', 'description', 'status']));
+    } catch (\Throwable $th) {
+        if ($storeName == 'store.endpoint') {
+            expect(fn () => throw $th)->toThrow(PanicControlStoreNotSupport::class);
+
+            return;
+        } else {
+            throw $th;
+        }
+    }
 })->with('stores')->with([
     ['name', 'new name'],
     ['description', 'new description'],
@@ -64,16 +94,15 @@ test('update a Panic Control by facade from panic name', function (string $store
 
 test('check status a Panic Control by facade', function (string $storeName, bool $store) {
     //Check status TRUE
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
-    ])->toArray());
-
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     //Check Status FALSE
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => false,
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     //Panic not exists in debug false
@@ -85,30 +114,23 @@ test('check status a Panic Control by facade', function (string $storeName, bool
 })->with('stores');
 
 test('list all Panic Control by facade', function (string $storeName, bool $store) {
-    $panics = PanicControlModel::factory()->count(3)->make()->toArray();
-
-    foreach ($panics as $panic) {
-        PanicControl::create($panic);
-    }
+    $panic = createPanic(count: 3);
 
     expect(PanicControl::all())->toHaveCount(3);
 })->with('stores');
 
 test('detail a Panic Control by facade', function (string $storeName, bool $store) {
-    $panic = PanicControl::create(PanicControlModel::factory()->make()->toArray());
+    $panic = createPanic(count: 1)[0];
 
     expect(PanicControl::find($panic['name']))->toMatchArray($panic);
 })->with('stores');
 
 test('count Panic Controls by facade', function (string $storeName, bool $store) {
+    if ($storeName == 'store.endpoint') {
+        makeFakeEndpoint(response: [], status: 200);
+    }
     expect(PanicControl::count())->toBeInt()->toBe(0);
 
-    PanicControl::create(PanicControlModel::factory()->make()->toArray());
+    createPanic(count: 1);
     expect(PanicControl::count())->toBeInt()->toBe(1);
-
-    PanicControl::create(PanicControlModel::factory()->make()->toArray());
-    expect(PanicControl::count())->toBeInt()->toBe(2);
-
-    PanicControl::create(PanicControlModel::factory()->make()->toArray());
-    expect(PanicControl::count())->toBeInt()->toBe(3);
 })->with('stores');

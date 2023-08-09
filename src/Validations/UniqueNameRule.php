@@ -21,10 +21,6 @@ class UniqueNameRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (! in_array(config('panic-control.default'), ['database', 'file'])) {
-            $fail('The store configurada não é válida.');
-        }
-
         if ($this->ignore == $value) {
             return;
         }

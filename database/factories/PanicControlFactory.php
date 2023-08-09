@@ -16,6 +16,7 @@ class PanicControlFactory extends Factory
             'name' => Str::snake($this->faker->name),
             'description' => $this->faker->text,
             'status' => $this->faker->boolean(),
+            'rules' => [],
         ];
     }
 }

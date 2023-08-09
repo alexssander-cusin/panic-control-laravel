@@ -23,6 +23,7 @@ class PanicControl
     protected function getCacheControl(string $panic = null): array
     {
         $cache = config('panic-control.cache');
+
         if (! self::$list) {
             $cacheStore = $cache['enabled'] ? $cache['store'] : 'array';
             self::$list = Cache::store($cacheStore)->remember($cache['key'], $cache['ttl'], function () {

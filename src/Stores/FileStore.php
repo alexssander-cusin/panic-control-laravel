@@ -10,7 +10,7 @@ use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlFileNotFound;
 use PanicControl\Facades\PanicControl;
 
-final class FileStore implements Store
+class FileStore implements Store
 {
     public function all(): array
     {

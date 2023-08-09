@@ -12,7 +12,7 @@ You can install the package via composer:
 composer require alexssander-cusin/panic-control-laravel
 ```
 
-You can publish and run the migrations with:
+You can publish and run the migrations with (only for database store):
 
 ```bash
 php artisan vendor:publish --tag="panic-control-laravel-migrations"
@@ -75,6 +75,14 @@ return [
             */
             
             'path' => 'panic-control.json',
+        ],
+        'endpoint' => [
+            /**
+             *--------------------------------------------------------------------------
+             * Defines the URL of the endpoint
+             *--------------------------------------------------------------------------
+             */
+            'url' => 'https://localhost/panic-control.json',
         ],
     ],
     'cache' => [
@@ -139,7 +147,7 @@ return [
 
 ### Facade
 
-Create a Panic Control:
+Create a Panic Control [^1]
 
 ```php
 use PanicControl\Facades\PanicControl;
@@ -151,7 +159,7 @@ PanicControl::create([
 ]);
 ```
 
-Update a Panic Control:
+Update a Panic Control [^1]
 
 ```php
 use PanicControl\Facades\PanicControl;
@@ -162,7 +170,7 @@ PanicControl::update($panic, [
 ]);
 ```
 
-Get all Panic Control:
+Get all Panic Control
 
 ```php
 use PanicControl\Facades\PanicControl;
@@ -170,7 +178,7 @@ use PanicControl\Facades\PanicControl;
 PanicControl::all();
 ```
 
-Get a Panic Control:
+Get a Panic Control
 
 ```php
 use PanicControl\Facades\PanicControl;
@@ -206,13 +214,13 @@ Detail a Panic Control
 php artisan panic-control:show panic-control-name
 ```
 
-Activate a Panic Control
+Activate a Panic Control [^1]
 
 ```bash
 php artisan panic-control:active panic-control-name
 ```
 
-Deactivate a Panic Control
+Deactivate a Panic Control [^1]
 
 ```bash
 php artisan panic-control:desactive panic-control-name
@@ -372,3 +380,5 @@ Please review [our security policy](../../security/policy) on how to report secu
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+[^1]: Not supported for *endpoint store*.

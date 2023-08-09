@@ -9,39 +9,31 @@ use Illuminate\Support\Facades\Storage;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
-beforeEach(function () {
-    //
-});
-
-test('show all panic control on command', function (string $storeName, bool $store) {
-
-    //Test empty panic control
+test('show all panic control on command but list is empty', function (string $storeName, bool $store) {
     match ($storeName) {
         'store.database' => PanicControlModel::truncate(),
         'store.file' => Storage::disk(config('panic-control.stores.file.disk'))->put(config('panic-control.stores.file.path'), json_encode([])),
+        'store.endpoint' => makeFakeEndpoint(response: [], status: 200),
     };
-    PanicControl::clear();
     $this->artisan('panic-control:list')
         ->expectsOutputToContain('Nenhum Panic Control encontrado.')
         ->assertExitCode(Command::FAILURE);
+})->with('stores');
 
-    //List all panic control
-    $panics = PanicControlModel::factory()->count(3)->make()->toArray();
-    foreach ($panics as $panic) {
-        PanicControl::create($panic);
-    }
+test('show all panic control on command', function (string $storeName, bool $store) {
+    $panics = createPanic(count: 3);
+
     $this->artisan('panic-control:list')
         ->expectsOutputToContain($panics[0]['name'])
         ->expectsOutputToContain($panics[1]['name'])
         ->expectsOutputToContain($panics[2]['name'])
         ->assertExitCode(Command::SUCCESS);
-
 })->with('stores');
 
 test('show details a panic control on command', function (string $storeName, bool $store) {
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'name' => 'test',
-    ])->toArray());
+    ])[0];
 
     $this->artisan('panic-control:show', ['name' => 'test'])
         ->expectsOutputToContain($panic['name'])
@@ -53,31 +45,48 @@ test('show details a panic control on command', function (string $storeName, boo
 })->with('stores');
 
 test('active a panic control on command', function (string $storeName, bool $store) {
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => false,
-    ])->toArray());
+    ])[0];
 
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
-    $this->artisan('panic-control:active', ['name' => $panic['name']])
-        ->expectsOutput("Panic Control: {$panic['name']} ativado com sucesso.")
-        ->assertExitCode(Command::SUCCESS);
+    if ($storeName == 'store.endpoint') {
+        $this->artisan('panic-control:active', ['name' => $panic['name']])
+            ->expectsOutput('Panic Control: Store endpoint does not support update method.')
+            ->assertExitCode(Command::FAILURE);
 
-    expect(PanicControl::check($panic['name']))->toBeTrue();
+        expect(PanicControl::check($panic['name']))->toBeFalse();
+    } else {
+        $this->artisan('panic-control:active', ['name' => $panic['name']])
+            ->expectsOutput("Panic Control: {$panic['name']} ativado com sucesso.")
+            ->assertExitCode(Command::SUCCESS);
+
+        expect(PanicControl::check($panic['name']))->toBeTrue();
+    }
 })->with('stores');
 
 test('deactive a panic control on command', function (string $storeName, bool $store) {
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
-    ])->toArray());
+    ])[0];
 
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
-    $this->artisan('panic-control:desactive', ['name' => $panic['name']])
-        ->expectsOutput("Panic Control: {$panic['name']} desativado com sucesso.")
-        ->assertExitCode(Command::SUCCESS);
+    if ($storeName == 'store.endpoint') {
+        $this->artisan('panic-control:desactive', ['name' => $panic['name']])
+            ->expectsOutput('Panic Control: Store endpoint does not support update method.')
+            ->assertExitCode(Command::FAILURE);
 
-    expect(PanicControl::check($panic['name']))->toBeFalse();
+        expect(PanicControl::check($panic['name']))->toBeTrue();
+    } else {
+        $this->artisan('panic-control:desactive', ['name' => $panic['name']])
+            ->expectsOutput("Panic Control: {$panic['name']} desativado com sucesso.")
+            ->assertExitCode(Command::SUCCESS);
+
+        expect(PanicControl::check($panic['name']))->toBeFalse();
+    }
+
 })->with('stores');
 
 test('create file when not exists and the store set file', function (string $storeName, bool $store) {
