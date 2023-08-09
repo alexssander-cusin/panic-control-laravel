@@ -3,17 +3,16 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Lottery;
 use PanicControl\Facades\PanicControl;
-use PanicControl\Models\PanicControl as PanicControlModel;
 
 test('rule does not exist', function (string $storeName, bool $store) {
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'not-found' => [
                 'not-found-parameter',
             ],
         ],
-    ])->toArray());
+    ])[0];
 
     expect(fn () => PanicControl::check($panic['name']))->toThrow(\PanicControl\Exceptions\PanicControlRuleDoesNotExist::class);
 })->with('stores');
@@ -23,7 +22,7 @@ test('multi rules', function (string $storeName, bool $store) {
     \Illuminate\Support\Facades\Route::shouldReceive('currentRouteName')->andReturn('route-name-test');
 
     // Rules exists but Panic Control is disabled
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => false,
         'rules' => [
             'route-name' => [
@@ -33,11 +32,11 @@ test('multi rules', function (string $storeName, bool $store) {
                 'url-path-test',
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     // Rules exists and Panic Control is enabled
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'route-name' => [
@@ -47,11 +46,11 @@ test('multi rules', function (string $storeName, bool $store) {
                 'url-path-test',
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     // Rules exists and Panic Control is enabled but one rule is false or null
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'route-name' => [
@@ -60,11 +59,11 @@ test('multi rules', function (string $storeName, bool $store) {
             'url-path' => false,
             'sampling' => null,
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     // Rules not list and Panic Control is enabled but one rule is false or null
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'route-name' => [
@@ -73,11 +72,11 @@ test('multi rules', function (string $storeName, bool $store) {
             'url-path' => false,
             'sampling' => null,
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     // Rules exists and Panic Control is enabled but one rule is not in the list
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'route-name' => [
@@ -87,11 +86,11 @@ test('multi rules', function (string $storeName, bool $store) {
                 'url-path-error',
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     // Rules exists and Panic Control is enabled but one rule is not in the list and the other is false
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'route-name' => [
@@ -102,7 +101,7 @@ test('multi rules', function (string $storeName, bool $store) {
             ],
             'sampling' => false,
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 })->with('stores');
 
@@ -110,54 +109,54 @@ test('rule route name', function (string $storeName, bool $store) {
     \Illuminate\Support\Facades\Route::shouldReceive('currentRouteName')->andReturn('route-name-test');
 
     // Route Name exists but Panic Control is disabled
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => false,
         'rules' => [
             'route-name' => [
                 'route-name-test',
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     // Route Name exists and Panic Control is enabled
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'route-name' => [
                 'route-name-test',
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     // Route Name exists and Panic Control is enabled but the route name is not in the list
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'route-name' => [
                 'route-name-error',
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     // Panic Control is enabled but the route name set false
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'route-name' => false,
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     // Panic Control is enabled but the route name set null
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'route-name' => false,
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 })->with('stores');
 
@@ -165,60 +164,60 @@ test('rule url path', function (string $storeName, bool $store) {
     $this->get('http://localhost/url-path-test');
 
     // Url Path exists but Panic Control is disabled
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => false,
         'rules' => [
             'url-path' => [
                 'url-path-test',
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     // Url Path exists and Panic Control is enabled
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'url-path' => [
                 'url-path-test',
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     // Url Path exists and Panic Control is enabled but the Url Path is not in the list
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'url-path' => [
                 'url-path-error',
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     // Panic Control is enabled but the Url Path set false
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'url-path' => false,
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     // Panic Control is enabled but the Url Path set null
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'url-path' => null,
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 })->with('stores');
 
 test('rule user sampling', function (string $storeName, bool $store) {
     // Sampling exists but Panic Control is disabled
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => false,
         'rules' => [
             'sampling' => [
@@ -226,32 +225,32 @@ test('rule user sampling', function (string $storeName, bool $store) {
                 'out_of' => 10,
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     // Panic Control is enabled but the Sampling set false
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'sampling' => false,
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     // Panic Control is enabled but the Sampling set null
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'sampling' => null,
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     //Set all Sampling with true
     Lottery::alwaysWin();
 
     // Panic Control is enabled and Sampling return true
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'sampling' => [
@@ -259,7 +258,7 @@ test('rule user sampling', function (string $storeName, bool $store) {
                 'out_of' => 10,
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
     expect(Session::get("panic-control.{$panic['name']}.sampling"))->toBeTrue();
 
@@ -267,7 +266,7 @@ test('rule user sampling', function (string $storeName, bool $store) {
     Lottery::alwaysLose();
 
     // Panic Control is enabled but the Sampling return false
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'sampling' => [
@@ -275,12 +274,12 @@ test('rule user sampling', function (string $storeName, bool $store) {
                 'out_of' => 10,
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
     expect(Session::get("panic-control.{$panic['name']}.sampling"))->toBeFalse();
 
     // Panic Control is enabled but the Sampling return iquals chance all times
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'sampling' => [
@@ -288,7 +287,7 @@ test('rule user sampling', function (string $storeName, bool $store) {
                 'out_of' => 10,
             ],
         ],
-    ])->toArray());
+    ])[0];
     $chance = PanicControl::check($panic['name']);
     expect(Session::get("panic-control.{$panic['name']}.sampling"))->toBe($chance);
     for ($i = 0; $i < 10; $i++) {
@@ -298,7 +297,7 @@ test('rule user sampling', function (string $storeName, bool $store) {
 
 test('rule user', function (string $storeName, bool $store) {
     // Panic Control is enabled and the user is not logged in
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'user' => [
@@ -306,14 +305,14 @@ test('rule user', function (string $storeName, bool $store) {
                 1,
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     Auth::shouldReceive('check')->andReturn(true);
     Auth::shouldReceive('user')->andReturn((object) ['id' => 1, 'email' => 'user@test.com']);
 
     // User exists but Panic Control is disabled
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => false,
         'rules' => [
             'user' => [
@@ -321,68 +320,68 @@ test('rule user', function (string $storeName, bool $store) {
                 1,
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     // User name exists and Panic Control is enabled
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'user' => [
                 'user@test.com',
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     // User ID exists and Panic Control is enabled
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'user' => [
                 1,
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     // Panic Control is enabled but the User Name is not in the list
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'user' => [
                 'error@test.com',
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     // Panic Control is enabled but the User ID is not in the list
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'user' => [
                 2,
             ],
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
     // Panic Control is enabled but the User set false
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'user' => false,
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
     // Panic Control is enabled but the User set null
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
             'user' => null,
         ],
-    ])->toArray());
+    ])[0];
     expect(PanicControl::check($panic['name']))->toBeTrue();
 })->with('stores');

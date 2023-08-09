@@ -15,9 +15,7 @@ function createPanic($count = 1, $parameters = []): array
         }
     } catch (PanicControlStoreNotSupport $th) {
         if ($th->context()['store'] == 'endpoint') {
-            Http::fake([
-                '*' => Http::response($panics, 200),
-            ]);
+            makeFakeEndpoint($panics, 200);
         } else {
             throw $th;
         }
@@ -26,4 +24,18 @@ function createPanic($count = 1, $parameters = []): array
     }
 
     return $panics;
+}
+
+function makeFakeEndpoint($response = [], $status = 200)
+{
+    $reflection = new \ReflectionObject(Http::getFacadeRoot());
+    $property = $reflection->getProperty('stubCallbacks');
+    $property->setAccessible(true);
+    $property->setValue(Http::getFacadeRoot(), collect());
+
+    Http::fake([
+        '*' => Http::response($response, $status),
+    ]);
+
+    PanicControl::clear();
 }

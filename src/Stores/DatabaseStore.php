@@ -16,7 +16,6 @@ class DatabaseStore implements Store
 
     public function create(array $parameters): array
     {
-
         return PanicControl::create($parameters)->toArray();
     }
 

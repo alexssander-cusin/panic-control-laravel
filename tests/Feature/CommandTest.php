@@ -6,8 +6,6 @@
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
-use Mockery\MockInterface;
-use PanicControl\Contracts\Store;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
@@ -15,12 +13,8 @@ test('show all panic control on command but list is empty', function (string $st
     match ($storeName) {
         'store.database' => PanicControlModel::truncate(),
         'store.file' => Storage::disk(config('panic-control.stores.file.disk'))->put(config('panic-control.stores.file.path'), json_encode([])),
-        'store.endpoint' => $this->partialMock(Store::class, function (MockInterface $mock) {
-            $mock->shouldReceive('all')
-                ->andReturn([]);
-        }),
+        'store.endpoint' => makeFakeEndpoint(response: [], status: 200),
     };
-    PanicControl::clear();
     $this->artisan('panic-control:list')
         ->expectsOutputToContain('Nenhum Panic Control encontrado.')
         ->assertExitCode(Command::FAILURE);
@@ -51,7 +45,6 @@ test('show details a panic control on command', function (string $storeName, boo
 })->with('stores');
 
 test('active a panic control on command', function (string $storeName, bool $store) {
-    PanicControl::clear();
     $panic = createPanic(count: 1, parameters: [
         'status' => false,
     ])[0];
@@ -74,7 +67,6 @@ test('active a panic control on command', function (string $storeName, bool $sto
 })->with('stores');
 
 test('deactive a panic control on command', function (string $storeName, bool $store) {
-    PanicControl::clear();
     $panic = createPanic(count: 1, parameters: [
         'status' => true,
     ])[0];
