@@ -71,7 +71,7 @@ test('active a panic control on command', function (string $storeName, bool $sto
 
         expect(PanicControl::check($panic['name']))->toBeTrue();
     }
-})->with('stores')->only();
+})->with('stores');
 
 test('deactive a panic control on command', function (string $storeName, bool $store) {
     PanicControl::clear();

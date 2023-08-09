@@ -1,16 +1,13 @@
 <?php
 
-use PanicControl\Facades\PanicControl;
-use PanicControl\Models\PanicControl as PanicControlModel;
-
 test('verify status on helper', function (string $storeName, bool $store) {
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => true,
-    ])->toArray());
+    ])[0];
     $this->assertTrue(getPanicControlActive($panic['name']));
 
-    $panic = PanicControl::create(PanicControlModel::factory()->make([
+    $panic = createPanic(count: 1, parameters: [
         'status' => false,
-    ])->toArray());
+    ])[0];
     $this->assertFalse(getPanicControlActive($panic['name']));
 })->with('stores');
