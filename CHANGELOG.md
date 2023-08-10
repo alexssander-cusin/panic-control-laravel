@@ -5,12 +5,12 @@ All notable changes to `alexssander-cusin/panic-control-laravel` will be documen
 ## v1.2.0 - 2023-08-09
 - [FEATURE] Add support ENDPOINT Store [#5](https://github.com/alexssander-cusin/panic-control-laravel/issues/5)
 - [FEATURE] Add support a database connections [#7](https://github.com/alexssander-cusin/panic-control-laravel/issues/7)
-- [FEATURE] Create helper for tests createPanic($count, $parameters) for create panics depending on the store
-- [FEATURE] Create helper for tests makeFakeEndpoint($response, $status) for create fake endpoint with parameters
-- [FIXED] Add empty rules on factory
-- [FIXED] Import PanicControl\Stores\FileStore on resources/stubs/PanicControlServiceProvider.php.stub
-- [FIXED] Remove Final Keyword ¶ for Store Classes
-- [REFACTOR] change config('panic-control.cache.time') to config('panic-control.cache.ttl')
+- [FEATURE] Create helper for tests createPanic($count, $parameters) for create panics depending on the store [#5](https://github.com/alexssander-cusin/panic-control-laravel/issues/5)
+- [FEATURE] Create helper for tests makeFakeEndpoint($response, $status) for create fake endpoint with parameters [#5](https://github.com/alexssander-cusin/panic-control-laravel/issues/5)
+- [FIXED] Add empty rules on factory [#5](https://github.com/alexssander-cusin/panic-control-laravel/issues/5)
+- [FIXED] Import PanicControl\Stores\FileStore on resources/stubs/PanicControlServiceProvider.php.stub [#5](https://github.com/alexssander-cusin/panic-control-laravel/issues/5)
+- [FIXED] Remove Final Keyword ¶ for Store Classes [#5](https://github.com/alexssander-cusin/panic-control-laravel/issues/5)
+- [REFACTOR] change config('panic-control.cache.time') to config('panic-control.cache.ttl') [#5](https://github.com/alexssander-cusin/panic-control-laravel/issues/5)
 
 ## v1.1.0 - 2023-07-04
 - [FEATURE] Support File Store
