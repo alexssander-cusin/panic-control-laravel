@@ -1,6 +1,6 @@
 <?php
 
-namespace PanicControl\Stores;
+namespace PanicControl\Drivers;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
@@ -10,14 +10,14 @@ use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlFileNotFound;
 use PanicControl\Facades\PanicControl;
 
-class FileStore implements Store
+class File implements Store
 {
     public function all(): array
     {
-        $storage = Storage::disk(config('panic-control.stores.file.disk'));
+        $storage = Storage::disk(config('panic-control.drivers.file.disk'));
 
-        return $storage->exists(config('panic-control.stores.file.path'))
-            ? collect(json_decode($storage->get(config('panic-control.stores.file.path')), true))->keyBy('name')->toArray()
+        return $storage->exists(config('panic-control.drivers.file.path'))
+            ? collect(json_decode($storage->get(config('panic-control.drivers.file.path')), true))->keyBy('name')->toArray()
             : throw new PanicControlFileNotFound();
     }
 
@@ -36,8 +36,8 @@ class FileStore implements Store
             'updated_at' => now()->toDateTimeString(),
         ];
 
-        Storage::disk(config('panic-control.stores.file.disk'))
-            ->put(config('panic-control.stores.file.path'), json_encode($panics, JSON_PRETTY_PRINT));
+        Storage::disk(config('panic-control.drivers.file.disk'))
+            ->put(config('panic-control.drivers.file.path'), json_encode($panics, JSON_PRETTY_PRINT));
 
         return Arr::last($panics);
     }
@@ -60,8 +60,8 @@ class FileStore implements Store
 
         $panics[$parameters['name']] = $parameters;
 
-        Storage::disk(config('panic-control.stores.file.disk'))
-            ->put(config('panic-control.stores.file.path'), json_encode(array_values($panics), JSON_PRETTY_PRINT));
+        Storage::disk(config('panic-control.drivers.file.disk'))
+            ->put(config('panic-control.drivers.file.path'), json_encode(array_values($panics), JSON_PRETTY_PRINT));
 
         return $parameters;
     }

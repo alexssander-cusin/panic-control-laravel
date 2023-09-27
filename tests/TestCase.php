@@ -29,7 +29,7 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
-        config()->set('panic-control.stores.database.connection', 'testing');
+        config()->set('panic-control.drivers.database.connection', 'testing');
         config()->set('panic-control.cache.ttl', 0);
 
         $migration = include __DIR__.'/../database/migrations/create_panic_control_table.php.stub';
@@ -39,7 +39,7 @@ class TestCase extends Orchestra
     public function assertPanicControlHas($parameters)
     {
         match (config('panic-control.default')) {
-            'database' => $this->assertDatabaseHas(config('panic-control.stores.database.table'), $parameters),
+            'database' => $this->assertDatabaseHas(config('panic-control.drivers.database.table'), $parameters),
             'endpoint', 'file' => count(Arr::where(PanicControl::all(), function (array $value, int|string $key) use ($parameters) {
                 $return = true;
                 foreach ($parameters as $k => $v) {
@@ -57,7 +57,7 @@ class TestCase extends Orchestra
     public function assertPanicControlMissing($parameters)
     {
         match (config('panic-control.default')) {
-            'database' => $this->assertDatabaseMissing(config('panic-control.stores.database.table'), $parameters),
+            'database' => $this->assertDatabaseMissing(config('panic-control.drivers.database.table'), $parameters),
             'endpoint', 'file' => count(Arr::where(PanicControl::all(), function (array $value, int|string $key) use ($parameters) {
                 $return = true;
                 foreach ($parameters as $k => $v) {

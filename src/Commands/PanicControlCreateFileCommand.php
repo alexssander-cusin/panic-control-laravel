@@ -19,7 +19,7 @@ class PanicControlCreateFileCommand extends Command
             return self::FAILURE;
         }
 
-        $config = config('panic-control.stores.file');
+        $config = config('panic-control.drivers.file');
 
         Storage::disk($config['disk'])->put($config['path'], file_get_contents(__DIR__.'/../../resources/panic-control-template.json'));
 

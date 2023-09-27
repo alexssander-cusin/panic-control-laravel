@@ -1,6 +1,6 @@
 <?php
 
-test('verify status on helper', function (string $storeName, bool $store) {
+test('verify status on helper', function (string $driver) {
     $panic = createPanic(count: 1, parameters: [
         'status' => true,
     ])[0];

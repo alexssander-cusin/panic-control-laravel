@@ -4,11 +4,11 @@ namespace PanicControl\Exceptions;
 
 use Exception;
 
-class PanicControlStoreNotSupport extends Exception
+class PanicControlDriverNotSupport extends Exception
 {
     public function __construct(protected string $store, protected string $method)
     {
-        parent::__construct("Panic Control: Store {$this->store} does not support {$this->method} method.");
+        parent::__construct("Panic Control: Driver {$this->store} does not support {$this->method} method.");
     }
 
     /**

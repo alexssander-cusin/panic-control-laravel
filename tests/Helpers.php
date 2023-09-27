@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use PanicControl\Exceptions\PanicControlStoreNotSupport;
+use PanicControl\Exceptions\PanicControlDriverNotSupport;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
@@ -13,7 +13,7 @@ function createPanic($count = 1, $parameters = []): array
         foreach ($panics as $panic) {
             PanicControl::create($panic);
         }
-    } catch (PanicControlStoreNotSupport $th) {
+    } catch (PanicControlDriverNotSupport $th) {
         if ($th->context()['store'] == 'endpoint') {
             makeFakeEndpoint($panics, 200);
         } else {

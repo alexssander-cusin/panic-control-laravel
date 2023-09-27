@@ -7,6 +7,13 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class PanicControlServiceProvider extends PackageServiceProvider
 {
+    public function registeringPackage()
+    {
+        $this->app->singleton('panic_control', function ($app) {
+            return new PanicControlManager($app);
+        });
+    }
+
     public function configurePackage(Package $package): void
     {
         /*
@@ -17,7 +24,6 @@ class PanicControlServiceProvider extends PackageServiceProvider
         $package
             ->name('panic-control-laravel')
             ->hasConfigFile(['panic-control'])
-            ->publishesServiceProvider('PanicControlServiceProvider')
             ->hasMigration('create_panic_control_table')
             ->hasCommands([
                 \PanicControl\Commands\PanicControlShowCommand::class,

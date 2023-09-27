@@ -37,7 +37,7 @@ return [
     
     'default' => 'database',
     
-    'stores' => [
+    'drivers' => [
         'database' => [
             /**
              *--------------------------------------------------------------------------
@@ -165,6 +165,7 @@ Update a Panic Control [^1]
 use PanicControl\Facades\PanicControl;
 
 $panic = 'panic-control-name'; //Panic Control Name or ID
+
 PanicControl::update($panic, [
     'name' => 'new-panic-control-name',
 ]);
@@ -189,6 +190,8 @@ PanicControl::find('panic-control-name');
 Check if Panic Control is Active
 
 ```php
+use PanicControl\Facades\PanicControl;
+
 PanicControl::check('panic-control-name');
 ```
 
@@ -348,6 +351,8 @@ return [
 In the `rules` column of the database, add the key registered in `config/panic-control.php` with the parameters that will be sent to the class.
 
 ```php
+use PanicControl\Facades\PanicControl;
+
 PanicControl::create([
     'name' => 'panic-control-name',
     'description' => 'Description for Panic Control',
@@ -356,6 +361,29 @@ PanicControl::create([
         'class-name' => 'parameters',
     ],
 ]);
+```
+## Drivers
+
+By default, the driver configured in `config('panic-control.default')`, but can be changed with support for: **database**, **file**, **endpoint**.
+
+```php
+use PanicControl\Facades\PanicControl;
+
+PanicControl::driver('file')->count()
+```
+
+### Extending Driver 
+
+> This feature is in beta tests
+
+If you want to include support for other driver, you can easily register a new driver in the `AppServiceProvider` as shown below:
+
+```php
+use PanicControl\Facades\PanicControl;
+
+PanicControl::extend('other', function(){
+  return return new \PanicControl\PanicControl(new OtherDrive());
+});
 ```
 
 ## Testing
@@ -367,6 +395,7 @@ composer test
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
 
 ## Security Vulnerabilities
 

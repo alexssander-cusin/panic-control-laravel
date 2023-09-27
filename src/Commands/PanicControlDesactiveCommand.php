@@ -4,7 +4,7 @@ namespace PanicControl\Commands;
 
 use Illuminate\Console\Command;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
-use PanicControl\Exceptions\PanicControlStoreNotSupport;
+use PanicControl\Exceptions\PanicControlDriverNotSupport;
 use PanicControl\Facades\PanicControl;
 
 class PanicControlDesactiveCommand extends Command
@@ -27,8 +27,8 @@ class PanicControlDesactiveCommand extends Command
 
         try {
             PanicControl::update($panicName, ['status' => false] + $panic);
-        } catch (PanicControlStoreNotSupport $th) {
-            $this->error("Panic Control: Store {$th->context()['store']} does not support update method.");
+        } catch (PanicControlDriverNotSupport $th) {
+            $this->error("Panic Control: Driver {$th->context()['store']} does not support update method.");
 
             return self::FAILURE;
         }

@@ -1,13 +1,13 @@
 <?php
 
-namespace PanicControl\Stores;
+namespace PanicControl\Drivers;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
 use PanicControl\Contracts\Store;
 use PanicControl\Models\PanicControl;
 
-class DatabaseStore implements Store
+class Database implements Store
 {
     public function all(): array
     {

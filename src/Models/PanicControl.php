@@ -29,12 +29,12 @@ class PanicControl extends Model
 
     public function getTable()
     {
-        return config('panic-control.stores.database.table');
+        return config('panic-control.drivers.database.table');
     }
 
     public function getConnectionName()
     {
-        return config('panic-control.stores.database.connection');
+        return config('panic-control.drivers.database.connection');
     }
 
     protected static function booted(): void

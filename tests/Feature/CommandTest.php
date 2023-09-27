@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Storage;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
-test('show all panic control on command but list is empty', function (string $storeName, bool $store) {
-    match ($storeName) {
-        'store.database' => PanicControlModel::truncate(),
-        'store.file' => Storage::disk(config('panic-control.stores.file.disk'))->put(config('panic-control.stores.file.path'), json_encode([])),
-        'store.endpoint' => makeFakeEndpoint(response: [], status: 200),
+test('show all panic control on command but list is empty', function (string $driver) {
+    match ($driver) {
+        'database' => PanicControlModel::truncate(),
+        'file' => Storage::disk(config('panic-control.drivers.file.disk'))->put(config('panic-control.drivers.file.path'), json_encode([])),
+        'endpoint' => makeFakeEndpoint(response: [], status: 200),
     };
     PanicControl::clear();
     $this->artisan('panic-control:list')
@@ -21,7 +21,7 @@ test('show all panic control on command but list is empty', function (string $st
         ->assertExitCode(Command::FAILURE);
 })->with('stores');
 
-test('show all panic control on command', function (string $storeName, bool $store) {
+test('show all panic control on command', function (string $driver) {
     $panics = createPanic(count: 3);
 
     $this->artisan('panic-control:list')
@@ -31,7 +31,7 @@ test('show all panic control on command', function (string $storeName, bool $sto
         ->assertExitCode(Command::SUCCESS);
 })->with('stores');
 
-test('show details a panic control on command', function (string $storeName, bool $store) {
+test('show details a panic control on command', function (string $driver) {
     $panic = createPanic(count: 1, parameters: [
         'name' => 'test',
     ])[0];
@@ -45,16 +45,16 @@ test('show details a panic control on command', function (string $storeName, boo
         ->assertExitCode(Command::FAILURE);
 })->with('stores');
 
-test('active a panic control on command', function (string $storeName, bool $store) {
+test('active a panic control on command', function (string $driver) {
     $panic = createPanic(count: 1, parameters: [
         'status' => false,
     ])[0];
 
     expect(PanicControl::check($panic['name']))->toBeFalse();
 
-    if ($storeName == 'store.endpoint') {
+    if ($driver == 'endpoint') {
         $this->artisan('panic-control:active', ['name' => $panic['name']])
-            ->expectsOutput('Panic Control: Store endpoint does not support update method.')
+            ->expectsOutput('Panic Control: Driver endpoint does not support update method.')
             ->assertExitCode(Command::FAILURE);
 
         expect(PanicControl::check($panic['name']))->toBeFalse();
@@ -67,16 +67,16 @@ test('active a panic control on command', function (string $storeName, bool $sto
     }
 })->with('stores');
 
-test('deactive a panic control on command', function (string $storeName, bool $store) {
+test('deactive a panic control on command', function (string $driver) {
     $panic = createPanic(count: 1, parameters: [
         'status' => true,
     ])[0];
 
     expect(PanicControl::check($panic['name']))->toBeTrue();
 
-    if ($storeName == 'store.endpoint') {
+    if ($driver == 'endpoint') {
         $this->artisan('panic-control:desactive', ['name' => $panic['name']])
-            ->expectsOutput('Panic Control: Store endpoint does not support update method.')
+            ->expectsOutput('Panic Control: Driver endpoint does not support update method.')
             ->assertExitCode(Command::FAILURE);
 
         expect(PanicControl::check($panic['name']))->toBeTrue();
@@ -90,21 +90,21 @@ test('deactive a panic control on command', function (string $storeName, bool $s
 
 })->with('stores');
 
-test('create file when not exists and the store set file', function (string $storeName, bool $store) {
+test('create file when not exists and the store set file', function (string $driver) {
 
-    Storage::disk(config('panic-control.stores.file.disk'))->delete(config('panic-control.stores.file.path'));
+    Storage::disk(config('panic-control.drivers.file.disk'))->delete(config('panic-control.drivers.file.path'));
 
-    if ($storeName === 'store.file') {
+    if ($driver === 'file') {
         $this->artisan('panic-control:create-file')
             ->expectsOutput('Arquivo criado com sucesso.')
             ->assertExitCode(Command::SUCCESS);
 
-        expect(Storage::disk(config('panic-control.stores.file.disk'))->exists(config('panic-control.stores.file.path')))->toBeTrue();
+        expect(Storage::disk(config('panic-control.drivers.file.disk'))->exists(config('panic-control.drivers.file.path')))->toBeTrue();
     } else {
         $this->artisan('panic-control:create-file')
             ->expectsOutput('O store configurado não é do tipo FILE.')
             ->assertExitCode(Command::FAILURE);
 
-        expect(Storage::disk(config('panic-control.stores.file.disk'))->exists(config('panic-control.stores.file.path')))->toBeFalse();
+        expect(Storage::disk(config('panic-control.drivers.file.disk'))->exists(config('panic-control.drivers.file.path')))->toBeFalse();
     }
 })->with('stores');

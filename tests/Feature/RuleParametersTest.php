@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Lottery;
 use PanicControl\Facades\PanicControl;
 
-test('rule does not exist', function (string $storeName, bool $store) {
+test('rule does not exist', function (string $driver) {
     $panic = createPanic(count: 1, parameters: [
         'status' => true,
         'rules' => [
@@ -17,7 +17,7 @@ test('rule does not exist', function (string $storeName, bool $store) {
     expect(fn () => PanicControl::check($panic['name']))->toThrow(\PanicControl\Exceptions\PanicControlRuleDoesNotExist::class);
 })->with('stores');
 
-test('multi rules', function (string $storeName, bool $store) {
+test('multi rules', function (string $driver) {
     $this->get('http://localhost/url-path-test');
     \Illuminate\Support\Facades\Route::shouldReceive('currentRouteName')->andReturn('route-name-test');
 
@@ -105,7 +105,7 @@ test('multi rules', function (string $storeName, bool $store) {
     expect(PanicControl::check($panic['name']))->toBeFalse();
 })->with('stores');
 
-test('rule route name', function (string $storeName, bool $store) {
+test('rule route name', function (string $driver) {
     \Illuminate\Support\Facades\Route::shouldReceive('currentRouteName')->andReturn('route-name-test');
 
     // Route Name exists but Panic Control is disabled
@@ -160,7 +160,7 @@ test('rule route name', function (string $storeName, bool $store) {
     expect(PanicControl::check($panic['name']))->toBeTrue();
 })->with('stores');
 
-test('rule url path', function (string $storeName, bool $store) {
+test('rule url path', function (string $driver) {
     $this->get('http://localhost/url-path-test');
 
     // Url Path exists but Panic Control is disabled
@@ -215,7 +215,7 @@ test('rule url path', function (string $storeName, bool $store) {
     expect(PanicControl::check($panic['name']))->toBeTrue();
 })->with('stores');
 
-test('rule user sampling', function (string $storeName, bool $store) {
+test('rule user sampling', function (string $driver) {
     // Sampling exists but Panic Control is disabled
     $panic = createPanic(count: 1, parameters: [
         'status' => false,
@@ -295,7 +295,7 @@ test('rule user sampling', function (string $storeName, bool $store) {
     }
 })->with('stores');
 
-test('rule user', function (string $storeName, bool $store) {
+test('rule user', function (string $driver) {
     // Panic Control is enabled and the user is not logged in
     $panic = createPanic(count: 1, parameters: [
         'status' => true,

@@ -2,6 +2,9 @@
 
 All notable changes to `alexssander-cusin/panic-control-laravel` will be documented in this file.
 
+## v1.3.0 - 2023-09-26
+- [FEATURE] Add support of Facade Manager
+
 ## v1.2.0 - 2023-08-09
 - [FEATURE] Add support ENDPOINT Store [#5](https://github.com/alexssander-cusin/panic-control-laravel/issues/5)
 - [FEATURE] Add support a database connections [#7](https://github.com/alexssander-cusin/panic-control-laravel/issues/7)

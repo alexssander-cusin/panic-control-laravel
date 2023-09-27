@@ -2,13 +2,13 @@
 
 use Illuminate\Support\Arr;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
-use PanicControl\Exceptions\PanicControlStoreNotSupport;
+use PanicControl\Exceptions\PanicControlDriverNotSupport;
 use PanicControl\Facades\PanicControl;
 use PanicControl\Models\PanicControl as PanicControlModel;
 
-test('Create a Panic Control by facade', function (string $storeName, bool $store) {
+test('Create a Panic Control by facade', function (string $driver) {
     try {
-        if ($storeName == 'store.endpoint') {
+        if ($driver == 'endpoint') {
             makeFakeEndpoint(response: [], status: 200);
         }
 
@@ -33,8 +33,8 @@ test('Create a Panic Control by facade', function (string $storeName, bool $stor
         $this->assertPanicControlHas($panic);
 
     } catch (\Throwable $th) {
-        if ($storeName == 'store.endpoint') {
-            expect(fn () => throw $th)->toThrow(PanicControlStoreNotSupport::class);
+        if ($driver == 'endpoint') {
+            expect(fn () => throw $th)->toThrow(PanicControlDriverNotSupport::class);
 
             return;
         } else {
@@ -43,12 +43,12 @@ test('Create a Panic Control by facade', function (string $storeName, bool $stor
     }
 })->with('stores');
 
-test('Failed to create Panic with wrong parameters', function (string $storeName, bool $store, string $test, array $parameters) {
-    if ($storeName == 'store.endpoint') {
+test('Failed to create Panic with wrong parameters', function (string $driver, string $test, array $parameters) {
+    if ($driver == 'endpoint') {
         makeFakeEndpoint(response: [], status: 200);
     }
 
-    if ($test == 'name.notUnique' && $storeName != 'store.endpoint') {
+    if ($test == 'name.notUnique' && $driver != 'endpoint') {
         PanicControl::create($parameters);
         $parameters = PanicControlModel::factory()->make(['name' => $parameters['name']])->toArray();
     }
@@ -68,7 +68,7 @@ test('Failed to create Panic with wrong parameters', function (string $storeName
     ['status.string', ['name' => 'name', 'description' => 'description', 'status' => 'disabled']],
 ]);
 
-test('update a Panic Control by facade from panic name', function (string $storeName, bool $store, $key, $value) {
+test('update a Panic Control by facade from panic name', function (string $driver, $key, $value) {
     try {
         $panic = createPanic(count: 1)[0];
 
@@ -78,8 +78,8 @@ test('update a Panic Control by facade from panic name', function (string $store
         $this->assertPanicControlMissing($panic);
         $this->assertPanicControlHas(Arr::only($newPanic, ['name', 'description', 'status']));
     } catch (\Throwable $th) {
-        if ($storeName == 'store.endpoint') {
-            expect(fn () => throw $th)->toThrow(PanicControlStoreNotSupport::class);
+        if ($driver == 'endpoint') {
+            expect(fn () => throw $th)->toThrow(PanicControlDriverNotSupport::class);
 
             return;
         } else {
@@ -92,7 +92,7 @@ test('update a Panic Control by facade from panic name', function (string $store
     ['status', true],
 ]);
 
-test('check status a Panic Control by facade', function (string $storeName, bool $store) {
+test('check status a Panic Control by facade', function (string $driver) {
     //Check status TRUE
     $panic = createPanic(count: 1, parameters: [
         'status' => true,
@@ -113,20 +113,20 @@ test('check status a Panic Control by facade', function (string $storeName, bool
     expect(fn () => PanicControl::check('panic-not-found'))->toThrow(PanicControlDoesNotExist::class);
 })->with('stores');
 
-test('list all Panic Control by facade', function (string $storeName, bool $store) {
+test('list all Panic Control by facade', function (string $driver) {
     $panic = createPanic(count: 3);
 
     expect(PanicControl::all())->toHaveCount(3);
 })->with('stores');
 
-test('detail a Panic Control by facade', function (string $storeName, bool $store) {
+test('detail a Panic Control by facade', function (string $driver) {
     $panic = createPanic(count: 1)[0];
 
     expect(PanicControl::find($panic['name']))->toMatchArray($panic);
 })->with('stores');
 
-test('count Panic Controls by facade', function (string $storeName, bool $store) {
-    if ($storeName == 'store.endpoint') {
+test('count Panic Controls by facade', function (string $driver) {
+    if ($driver == 'endpoint') {
         makeFakeEndpoint(response: [], status: 200);
     }
     expect(PanicControl::count())->toBeInt()->toBe(0);

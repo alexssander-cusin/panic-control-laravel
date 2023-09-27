@@ -1,28 +1,28 @@
 <?php
 
-namespace PanicControl\Stores;
+namespace PanicControl\Drivers;
 
 use Illuminate\Support\Facades\Http;
 use PanicControl\Contracts\Store;
-use PanicControl\Exceptions\PanicControlStoreNotSupport;
+use PanicControl\Exceptions\PanicControlDriverNotSupport;
 
-class EndpointStore implements Store
+class Endpoint implements Store
 {
     public function all(): array
     {
-        return collect(Http::get(config('panic-control.stores.endpoint.url'))->json())
+        return collect(Http::get(config('panic-control.drivers.endpoint.url'))->json())
             ->keyBy('name')
             ->toArray();
     }
 
     public function create(array $parameters): array
     {
-        throw new PanicControlStoreNotSupport('endpoint', 'create');
+        throw new PanicControlDriverNotSupport('endpoint', 'create');
     }
 
     public function update(string|int $panicName, array $parameters): array
     {
-        throw new PanicControlStoreNotSupport('endpoint', 'update');
+        throw new PanicControlDriverNotSupport('endpoint', 'update');
     }
 
     public function count(): int

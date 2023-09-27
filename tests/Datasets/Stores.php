@@ -1,42 +1,26 @@
 <?php
 
 use Illuminate\Support\Facades\Storage;
-use PanicControl\Contracts\Store;
 use PanicControl\Facades\PanicControl;
-use PanicControl\Stores\DatabaseStore;
-use PanicControl\Stores\EndpointStore;
-use PanicControl\Stores\FileStore;
 
 dataset('stores', [
-    [
-        'store.database', function () {
-            config()->set('panic-control.default', 'database');
+    function () {
+        config()->set('panic-control.default', 'database');
 
-            $this->app->bind(Store::class, DatabaseStore::class);
+        return 'database';
+    },
+    function () {
+        config()->set('panic-control.default', 'file');
 
-            return true;
-        },
-    ],
-    [
-        'store.file', function () {
-            config()->set('panic-control.default', 'file');
+        Storage::disk(config('panic-control.drivers.file.disk'))->delete(config('panic-control.drivers.file.path'));
+        Storage::disk(config('panic-control.drivers.file.disk'))->put(config('panic-control.drivers.file.path'), json_encode([]));
+        PanicControl::clear();
 
-            $this->app->bind(Store::class, FileStore::class);
+        return 'file';
+    },
+    function () {
+        config()->set('panic-control.default', 'endpoint');
 
-            Storage::disk(config('panic-control.stores.file.disk'))->delete(config('panic-control.stores.file.path'));
-            Storage::disk(config('panic-control.stores.file.disk'))->put(config('panic-control.stores.file.path'), json_encode([]));
-            PanicControl::clear();
-
-            return true;
-        },
-    ],
-    [
-        'store.endpoint', function () {
-            config()->set('panic-control.default', 'endpoint');
-
-            $this->app->bind(Store::class, EndpointStore::class);
-
-            return true;
-        },
-    ],
+        return 'endpoint';
+    },
 ]);
