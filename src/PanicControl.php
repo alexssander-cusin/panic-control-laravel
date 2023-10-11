@@ -9,33 +9,35 @@ use Illuminate\Support\Facades\Validator;
 use PanicControl\Contracts\Store;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlRuleDoesNotExist;
-use PanicControl\Validations\UniqueNameRule;
 
 class PanicControl
 {
+    private $storeName;
+
     private static $list = [];
 
     public function __construct(
         private Store $store
     ) {
+        $this->storeName = $this->store::class;
     }
 
     protected function getCacheControl(string $panic = null): array
     {
         $cache = config('panic-control.cache');
 
-        if (! self::$list) {
+        if (! isset(self::$list[$this->storeName])) {
             $cacheStore = $cache['enabled'] ? $cache['store'] : 'array';
-            self::$list = Cache::store($cacheStore)->remember($cache['key'], $cache['ttl'], function () {
+            self::$list[$this->storeName] = Cache::store($cacheStore)->remember("{$cache['key']}:{$this->storeName}", $cache['ttl'], function () {
                 return $this->store->all();
             });
         }
 
         if (is_null($panic)) {
-            return self::$list;
+            return self::$list[$this->storeName];
         }
 
-        return self::$list[$panic] ?? throw new PanicControlDoesNotExist($panic);
+        return self::$list[$this->storeName][$panic] ?? throw new PanicControlDoesNotExist($panic);
     }
 
     public function all(): array
@@ -91,21 +93,17 @@ class PanicControl
 
     public function create(array $parameters): array
     {
-        $validator = Validator::make($parameters, [
+        $validator = Validator::make($parameters, array_merge_recursive($this->store->validator(), [
             'name' => [
                 'required',
                 'string',
-                'max:255',
-                new UniqueNameRule,
             ],
-            'description' => 'max:255',
             'status' => 'boolean',
             'rules' => 'array',
-        ]);
+        ]));
 
         if ($validator->fails()) {
-            Log::error('Campos inválidos.', $validator->errors()->all());
-            throw new Exception('Campos inválidos.');
+            throw new Exception('Panic Control: '.implode(', ', $validator->errors()->all()));
         }
 
         $panic = $this->store->create($parameters);
@@ -117,19 +115,16 @@ class PanicControl
 
     public function update(string|int $panic, array $parameters): array
     {
-        $validator = Validator::make($parameters, [
+        $validator = Validator::make($parameters, array_merge_recursive($this->store->validator($panic), [
             'name' => [
                 'string',
-                'max:255',
-                new UniqueNameRule($panic),
             ],
-            'description' => 'max:255',
             'status' => 'boolean',
-        ]);
+            'rules' => 'array',
+        ]));
 
         if ($validator->fails()) {
-            Log::error('Campos inválidos.', $validator->errors()->all());
-            throw new Exception('Campos inválidos.');
+            throw new Exception('Panic Control: '.implode(', ', $validator->errors()->all()));
         }
 
         $panic = $this->store->update($panic, $parameters);

@@ -15,6 +15,11 @@ class Endpoint implements Store
             ->toArray();
     }
 
+    public function validator(string|bool $ignore = false): array
+    {
+        throw new PanicControlDriverNotSupport('endpoint', 'create');
+    }
+
     public function create(array $parameters): array
     {
         throw new PanicControlDriverNotSupport('endpoint', 'create');

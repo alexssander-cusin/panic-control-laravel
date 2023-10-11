@@ -2,6 +2,7 @@
 
 namespace PanicControl\Drivers;
 
+use Closure;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use PanicControl\Contracts\Store;
@@ -12,6 +13,25 @@ class Database implements Store
     public function all(): array
     {
         return PanicControl::all()->keyBy('name')->toArray();
+    }
+
+    public function validator(string|bool $ignore = false): array
+    {
+        return [
+            'name' => [
+                'max:255',
+                function (string $attribute, mixed $value, Closure $fail) use ($ignore) {
+                    if ($ignore == $value) {
+                        return;
+                    }
+
+                    if (PanicControl::where('id', $value)->orWhere('name', $value)->exists()) {
+                        $fail("The {$value} exists.");
+                    }
+                },
+            ],
+            'description' => 'max:255',
+        ];
     }
 
     public function create(array $parameters): array

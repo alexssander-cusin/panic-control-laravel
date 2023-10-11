@@ -2,6 +2,7 @@
 
 namespace PanicControl\Drivers;
 
+use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -19,6 +20,31 @@ class File implements Store
         return $storage->exists(config('panic-control.drivers.file.path'))
             ? collect(json_decode($storage->get(config('panic-control.drivers.file.path')), true))->keyBy('name')->toArray()
             : throw new PanicControlFileNotFound();
+    }
+
+    public function validator(string|bool $ignore = false): array
+    {
+        return [
+            'name' => [
+                'max:255',
+                function (string $attribute, mixed $value, Closure $fail) use ($ignore) {
+                    if ($ignore == $value) {
+                        return;
+                    }
+
+                    try {
+                        PanicControl::driver('file')->find($value);
+                    } catch (PanicControlFileNotFound $th) {
+                        return;
+                    } catch (PanicControlDoesNotExist $th) {
+                        return;
+                    }
+
+                    $fail("The {$value} exists.");
+                },
+            ],
+            'description' => 'max:255',
+        ];
     }
 
     public function create(array $parameters): array

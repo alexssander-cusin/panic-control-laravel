@@ -63,8 +63,8 @@ test('Failed to create Panic with wrong parameters', function (string $driver, s
 })->with('stores')->with([
     ['name.empty', fn () => PanicControlModel::factory()->make(['name' => ''])->toArray()],
     ['name.notUnique', fn () => PanicControlModel::factory()->make()->toArray()],
-    ['name.max:264', fn () => PanicControlModel::factory()->make(['name' => 'namenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamename'])->toArray()],
-    ['description.max:264', fn () => PanicControlModel::factory()->make(['description' => 'descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription'])->toArray()],
+    ['name.max:264', fn () => PanicControlModel::factory()->make(['name' => str_repeat('a', 264)])->toArray()],
+    ['description.max:264', fn () => PanicControlModel::factory()->make(['description' => str_repeat('a', 264)])->toArray()],
     ['status.string', ['name' => 'name', 'description' => 'description', 'status' => 'disabled']],
 ]);
 

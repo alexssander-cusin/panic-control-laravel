@@ -4,12 +4,12 @@ use Illuminate\Support\Facades\Storage;
 use PanicControl\Facades\PanicControl;
 
 dataset('stores', [
-    function () {
+    'database' => function () {
         config()->set('panic-control.default', 'database');
 
         return 'database';
     },
-    function () {
+    'file' => function () {
         config()->set('panic-control.default', 'file');
 
         Storage::disk(config('panic-control.drivers.file.disk'))->delete(config('panic-control.drivers.file.path'));
@@ -18,7 +18,7 @@ dataset('stores', [
 
         return 'file';
     },
-    function () {
+    'endpoint' => function () {
         config()->set('panic-control.default', 'endpoint');
 
         return 'endpoint';

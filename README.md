@@ -12,17 +12,17 @@ You can install the package via composer:
 composer require alexssander-cusin/panic-control-laravel
 ```
 
+You can publish the config file with:
+
+```bash
+php artisan vendor:publish --tag="panic-control-laravel-config"
+```
+
 You can publish and run the migrations with (only for database store):
 
 ```bash
 php artisan vendor:publish --tag="panic-control-laravel-migrations"
 php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="panic-control-laravel-config"
 ```
 
 This are the contents of the published config file:
