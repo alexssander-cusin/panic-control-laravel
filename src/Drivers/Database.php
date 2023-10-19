@@ -7,9 +7,12 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use PanicControl\Contracts\Store;
 use PanicControl\Models\PanicControl;
+use PanicControl\PanicControlAbstract;
 
-class Database implements Store
+class Database extends PanicControlAbstract
 {
+    protected $key = 'database';
+
     public function all(): array
     {
         return PanicControl::all()->keyBy('name')->toArray();
