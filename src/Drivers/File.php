@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use PanicControl\Contracts\Store;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlFileNotFound;
 use PanicControl\Facades\PanicControl;

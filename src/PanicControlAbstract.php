@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use PanicControl\Contracts\Store;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlRuleDoesNotExist;
 

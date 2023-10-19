@@ -5,7 +5,6 @@ namespace PanicControl\Drivers;
 use Closure;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use PanicControl\Contracts\Store;
 use PanicControl\Models\PanicControl;
 use PanicControl\PanicControlAbstract;
 

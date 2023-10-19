@@ -3,7 +3,6 @@
 namespace PanicControl\Drivers;
 
 use Illuminate\Support\Facades\Http;
-use PanicControl\Contracts\Store;
 use PanicControl\Exceptions\PanicControlDriverNotSupport;
 use PanicControl\PanicControlAbstract;
 
