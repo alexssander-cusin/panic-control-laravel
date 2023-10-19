@@ -14,6 +14,8 @@ use PanicControl\PanicControlAbstract;
 
 class File extends PanicControlAbstract
 {
+    protected $key = 'file';
+
     public function all(): array
     {
         $storage = Storage::disk(config('panic-control.drivers.file.disk'));

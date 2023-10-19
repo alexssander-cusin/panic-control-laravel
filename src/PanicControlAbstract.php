@@ -17,19 +17,19 @@ abstract class PanicControlAbstract
     protected function getCacheControl(string $panic = null): array
     {
         $cache = config('panic-control.cache');
-        if (empty(self::$list)) {
+        if (! isset(self::$list[$this->key])) {
             $cacheStore = $cache['enabled'] ? $cache['store'] : 'array';
 
-            self::$list = Cache::store($cacheStore)->remember("{$cache['key']}:{$this->key}", $cache['ttl'], function () {
+            self::$list[$this->key] = Cache::store($cacheStore)->remember("{$cache['key']}:{$this->key}", $cache['ttl'], function () {
                 return $this->all();
             });
         }
 
         if (is_null($panic)) {
-            return self::$list;
+            return self::$list[$this->key];
         }
 
-        return self::$list[$panic] ?? throw new PanicControlDoesNotExist($panic);
+        return self::$list[$this->key][$panic] ?? throw new PanicControlDoesNotExist($panic);
     }
 
     public function all(): array
@@ -134,6 +134,6 @@ abstract class PanicControlAbstract
             Cache::store($cache['store'])->forget($cache['key']);
         }
 
-        self::$list = [];
+        self::$list[$this->key] = [];
     }
 }

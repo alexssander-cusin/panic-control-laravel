@@ -9,6 +9,8 @@ use PanicControl\PanicControlAbstract;
 
 class Endpoint extends PanicControlAbstract
 {
+    protected $key = 'endpoint';
+
     public function all(): array
     {
         return collect(Http::get(config('panic-control.drivers.endpoint.url'))->json())
