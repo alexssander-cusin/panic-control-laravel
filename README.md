@@ -12,13 +12,6 @@ You can install the package via composer:
 composer require alexssander-cusin/panic-control-laravel
 ```
 
-You can publish and run the migrations with (only for database store):
-
-```bash
-php artisan vendor:publish --tag="panic-control-laravel-migrations"
-php artisan migrate
-```
-
 You can publish the config file with:
 
 ```bash
@@ -143,6 +136,13 @@ return [
 ];
 ```
 
+You can publish and run the migrations with (only for database store):
+
+```bash
+php artisan vendor:publish --tag="panic-control-laravel-migrations"
+php artisan migrate
+```
+
 ## Usage
 
 ### Facade
@@ -166,7 +166,7 @@ use PanicControl\Facades\PanicControl;
 
 $panic = 'panic-control-name'; //Panic Control Name or ID
 
-PanicControl::update($panic, [
+PanicControl::edit($panic, [
     'name' => 'new-panic-control-name',
 ]);
 ```
@@ -326,7 +326,7 @@ To create a custom rule follow the example
 
 ```php
 use PanicControl\Rules\Rule;
-use PanicControl\Contracts\Rule as RuleContract;
+use PanicControl\Contracts\RuleContract;
 
 class ClassName extends Rule implements RuleContract
 {
@@ -382,7 +382,7 @@ If you want to include support for other driver, you can easily register a new d
 use PanicControl\Facades\PanicControl;
 
 PanicControl::extend('other', function(){
-  return return new \PanicControl\PanicControl(new OtherDrive());
+  return return new OtherDrive();
 });
 ```
 

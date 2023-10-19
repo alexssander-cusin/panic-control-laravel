@@ -2,17 +2,21 @@
 
 namespace PanicControl\Drivers;
 
+use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use PanicControl\Contracts\Store;
+use PanicControl\Contracts\PanicControlContract;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlFileNotFound;
 use PanicControl\Facades\PanicControl;
+use PanicControl\PanicControlAbstract;
 
-class File implements Store
+class File extends PanicControlAbstract implements PanicControlContract
 {
-    public function all(): array
+    protected $key = 'file';
+
+    public function getAll(): array
     {
         $storage = Storage::disk(config('panic-control.drivers.file.disk'));
 
@@ -21,7 +25,32 @@ class File implements Store
             : throw new PanicControlFileNotFound();
     }
 
-    public function create(array $parameters): array
+    public function validator(string|bool $ignore = false): array
+    {
+        return [
+            'name' => [
+                'max:255',
+                function (string $attribute, mixed $value, Closure $fail) use ($ignore) {
+                    if ($ignore == $value) {
+                        return;
+                    }
+
+                    try {
+                        PanicControl::driver('file')->find($value);
+                    } catch (PanicControlFileNotFound $th) {
+                        return;
+                    } catch (PanicControlDoesNotExist $th) {
+                        return;
+                    }
+
+                    $fail("The {$value} exists.");
+                },
+            ],
+            'description' => 'max:255',
+        ];
+    }
+
+    public function store(array $parameters): array
     {
         try {
             $panics = $this->all();

@@ -3,24 +3,32 @@
 namespace PanicControl\Drivers;
 
 use Illuminate\Support\Facades\Http;
-use PanicControl\Contracts\Store;
+use PanicControl\Contracts\PanicControlContract;
 use PanicControl\Exceptions\PanicControlDriverNotSupport;
+use PanicControl\PanicControlAbstract;
 
-class Endpoint implements Store
+class Endpoint extends PanicControlAbstract implements PanicControlContract
 {
-    public function all(): array
+    protected $key = 'endpoint';
+
+    public function getAll(): array
     {
         return collect(Http::get(config('panic-control.drivers.endpoint.url'))->json())
             ->keyBy('name')
             ->toArray();
     }
 
-    public function create(array $parameters): array
+    public function validator(string|bool $ignore = false): array
     {
         throw new PanicControlDriverNotSupport('endpoint', 'create');
     }
 
-    public function update(string|int $panicName, array $parameters): array
+    public function store(array $parameters): array
+    {
+        throw new PanicControlDriverNotSupport('endpoint', 'create');
+    }
+
+    public function update(string|int $panicName = null, array $parameters): array
     {
         throw new PanicControlDriverNotSupport('endpoint', 'update');
     }
