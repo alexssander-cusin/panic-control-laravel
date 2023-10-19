@@ -11,7 +11,7 @@ use PanicControl\PanicControlAbstract;
 
 class Database extends PanicControlAbstract implements PanicControlContract
 {
-    protected $key = 'database';
+    protected string $key = 'database';
 
     public function getAll(): array
     {

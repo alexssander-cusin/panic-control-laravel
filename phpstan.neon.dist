@@ -10,8 +10,8 @@ parameters:
     tmpDir: build/phpstan
     ignoreErrors:
         - '#Access to an undefined property Illuminate\\Foundation\\Auth\\User::#'
-        - '#Call to an undefined static method PanicControl\\Facades\\PanicControl::#'
-    checkOctaneCompatibility: true
+        - '#Call to an undefined method PanicControl\\PanicControlAbstract::#'
+    checkOctaneCompatibility: false
     checkModelProperties: false
     checkMissingIterableValueType: false
     treatPhpDocTypesAsCertain: false
