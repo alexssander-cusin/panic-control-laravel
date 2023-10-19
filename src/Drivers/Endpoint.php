@@ -5,8 +5,9 @@ namespace PanicControl\Drivers;
 use Illuminate\Support\Facades\Http;
 use PanicControl\Contracts\Store;
 use PanicControl\Exceptions\PanicControlDriverNotSupport;
+use PanicControl\PanicControlAbstract;
 
-class Endpoint implements Store
+class Endpoint extends PanicControlAbstract
 {
     public function all(): array
     {

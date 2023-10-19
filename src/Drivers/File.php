@@ -10,8 +10,9 @@ use PanicControl\Contracts\Store;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlFileNotFound;
 use PanicControl\Facades\PanicControl;
+use PanicControl\PanicControlAbstract;
 
-class File implements Store
+class File extends PanicControlAbstract
 {
     public function all(): array
     {

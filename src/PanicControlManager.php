@@ -19,13 +19,13 @@ class PanicControlManager extends Manager
         return new Database();
     }
 
-    // public function createFileDriver()
-    // {
-    //     return new PanicControl(new File());
-    // }
+    public function createFileDriver()
+    {
+        return new File();
+    }
 
-    // public function createEndpointDriver()
-    // {
-    //     return new PanicControl(new Endpoint());
-    // }
+    public function createEndpointDriver()
+    {
+        return new Endpoint();
+    }
 }
