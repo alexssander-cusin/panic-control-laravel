@@ -9,7 +9,7 @@ use PanicControl\PanicControlAbstract;
 
 class Endpoint extends PanicControlAbstract implements PanicControlContract
 {
-    protected $key = 'endpoint';
+    protected string $key = 'endpoint';
 
     public function getAll(): array
     {

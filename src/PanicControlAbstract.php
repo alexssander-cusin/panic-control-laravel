@@ -13,23 +13,45 @@ abstract class PanicControlAbstract
 {
     private static $list = [];
 
+    protected string $key;
+
+    protected function getKey(): string
+    {
+        return $this->key;
+    }
+
+    protected function setList(array $array): array
+    {
+        return self::$list[$this->getKey()] = $array;
+    }
+
+    protected function getList(): array
+    {
+        return self::$list[$this->getKey()];
+    }
+
+    protected function hasList(): bool
+    {
+        return empty(self::$list[$this->getKey()]);
+    }
+
     protected function getCacheControl(string $panic = null): array
     {
         $cache = config('panic-control.cache');
 
-        if (empty(self::$list[$this->key])) {
+        if ($this->hasList()) {
             $cacheStore = $cache['enabled'] ? $cache['store'] : 'array';
 
-            self::$list[$this->key] = Cache::store($cacheStore)->remember("{$cache['key']}:{$this->key}", $cache['ttl'], function () {
+            $this->setList(Cache::store($cacheStore)->remember("{$cache['key']}:{$this->key}", $cache['ttl'], function () {
                 return $this->getAll();
-            });
+            }));
         }
 
         if (is_null($panic)) {
-            return self::$list[$this->key];
+            return $this->getList();
         }
 
-        return self::$list[$this->key][$panic] ?? throw new PanicControlDoesNotExist($panic);
+        return $this->getList()[$panic] ?? throw new PanicControlDoesNotExist($panic);
     }
 
     public function all(): array

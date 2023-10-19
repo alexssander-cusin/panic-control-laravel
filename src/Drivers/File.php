@@ -14,7 +14,7 @@ use PanicControl\PanicControlAbstract;
 
 class File extends PanicControlAbstract implements PanicControlContract
 {
-    protected $key = 'file';
+    protected string $key = 'file';
 
     public function getAll(): array
     {
