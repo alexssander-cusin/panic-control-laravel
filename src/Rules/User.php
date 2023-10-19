@@ -3,7 +3,7 @@
 namespace PanicControl\Rules;
 
 use Illuminate\Support\Facades\Auth;
-use PanicControl\Contracts\Rule as RuleContract;
+use PanicControl\Contracts\RuleContract;
 
 class User extends Rule implements RuleContract
 {

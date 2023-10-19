@@ -3,14 +3,15 @@
 namespace PanicControl\Drivers;
 
 use Illuminate\Support\Facades\Http;
+use PanicControl\Contracts\PanicControlContract;
 use PanicControl\Exceptions\PanicControlDriverNotSupport;
 use PanicControl\PanicControlAbstract;
 
-class Endpoint extends PanicControlAbstract
+class Endpoint extends PanicControlAbstract implements PanicControlContract
 {
     protected $key = 'endpoint';
 
-    public function all(): array
+    public function getAll(): array
     {
         return collect(Http::get(config('panic-control.drivers.endpoint.url'))->json())
             ->keyBy('name')
@@ -27,7 +28,7 @@ class Endpoint extends PanicControlAbstract
         throw new PanicControlDriverNotSupport('endpoint', 'create');
     }
 
-    public function save(string|int $panicName = null, array $parameters): array
+    public function update(string|int $panicName = null, array $parameters): array
     {
         throw new PanicControlDriverNotSupport('endpoint', 'update');
     }

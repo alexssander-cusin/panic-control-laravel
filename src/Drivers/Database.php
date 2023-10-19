@@ -5,14 +5,15 @@ namespace PanicControl\Drivers;
 use Closure;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use PanicControl\Contracts\PanicControlContract;
 use PanicControl\Models\PanicControl;
 use PanicControl\PanicControlAbstract;
 
-class Database extends PanicControlAbstract
+class Database extends PanicControlAbstract implements PanicControlContract
 {
     protected $key = 'database';
 
-    public function all(): array
+    public function getAll(): array
     {
         return PanicControl::all()->keyBy('name')->toArray();
     }

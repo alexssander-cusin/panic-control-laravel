@@ -2,13 +2,13 @@
 
 namespace PanicControl\Contracts;
 
-interface Store
+interface PanicControlContract
 {
-    public function all(): array;
+    public function getAll(): array;
 
     public function validator(string|bool $ignore = false): array;
 
-    public function create(array $parameters): array;
+    public function store(array $parameters): array;
 
     public function update(string|int $panic, array $parameters): array;
 

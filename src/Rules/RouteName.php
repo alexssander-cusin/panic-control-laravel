@@ -3,7 +3,7 @@
 namespace PanicControl\Rules;
 
 use Illuminate\Support\Facades\Route;
-use PanicControl\Contracts\Rule as RuleContract;
+use PanicControl\Contracts\RuleContract;
 
 class RouteName extends Rule implements RuleContract
 {

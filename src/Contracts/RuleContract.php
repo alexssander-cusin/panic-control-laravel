@@ -2,7 +2,7 @@
 
 namespace PanicControl\Contracts;
 
-interface Rule
+interface RuleContract
 {
     public function rule(array $parameters): ?bool;
 }

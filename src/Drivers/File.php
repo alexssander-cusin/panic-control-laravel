@@ -6,16 +6,17 @@ use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use PanicControl\Contracts\PanicControlContract;
 use PanicControl\Exceptions\PanicControlDoesNotExist;
 use PanicControl\Exceptions\PanicControlFileNotFound;
 use PanicControl\Facades\PanicControl;
 use PanicControl\PanicControlAbstract;
 
-class File extends PanicControlAbstract
+class File extends PanicControlAbstract implements PanicControlContract
 {
     protected $key = 'file';
 
-    public function all(): array
+    public function getAll(): array
     {
         $storage = Storage::disk(config('panic-control.drivers.file.disk'));
 

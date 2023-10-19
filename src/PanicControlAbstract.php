@@ -21,7 +21,7 @@ abstract class PanicControlAbstract
             $cacheStore = $cache['enabled'] ? $cache['store'] : 'array';
 
             self::$list[$this->key] = Cache::store($cacheStore)->remember("{$cache['key']}:{$this->key}", $cache['ttl'], function () {
-                return $this->all();
+                return $this->getAll();
             });
         }
 

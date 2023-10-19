@@ -4,7 +4,7 @@ namespace PanicControl\Rules;
 
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Lottery;
-use PanicControl\Contracts\Rule as RuleContract;
+use PanicControl\Contracts\RuleContract;
 
 class Sampling extends Rule implements RuleContract
 {

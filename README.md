@@ -18,13 +18,6 @@ You can publish the config file with:
 php artisan vendor:publish --tag="panic-control-laravel-config"
 ```
 
-You can publish and run the migrations with (only for database store):
-
-```bash
-php artisan vendor:publish --tag="panic-control-laravel-migrations"
-php artisan migrate
-```
-
 This are the contents of the published config file:
 
 ```php
@@ -141,6 +134,13 @@ return [
         'user' => PanicControl\Rules\User::class,
     ],
 ];
+```
+
+You can publish and run the migrations with (only for database store):
+
+```bash
+php artisan vendor:publish --tag="panic-control-laravel-migrations"
+php artisan migrate
 ```
 
 ## Usage
@@ -326,7 +326,7 @@ To create a custom rule follow the example
 
 ```php
 use PanicControl\Rules\Rule;
-use PanicControl\Contracts\Rule as RuleContract;
+use PanicControl\Contracts\RuleContract;
 
 class ClassName extends Rule implements RuleContract
 {
@@ -382,7 +382,7 @@ If you want to include support for other driver, you can easily register a new d
 use PanicControl\Facades\PanicControl;
 
 PanicControl::extend('other', function(){
-  return return new \PanicControl\PanicControl(new OtherDrive());
+  return return new OtherDrive();
 });
 ```
 
