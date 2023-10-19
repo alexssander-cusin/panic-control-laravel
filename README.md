@@ -166,7 +166,7 @@ use PanicControl\Facades\PanicControl;
 
 $panic = 'panic-control-name'; //Panic Control Name or ID
 
-PanicControl::update($panic, [
+PanicControl::edit($panic, [
     'name' => 'new-panic-control-name',
 ]);
 ```

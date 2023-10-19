@@ -26,7 +26,7 @@ class PanicControlActiveCommand extends Command
         }
 
         try {
-            PanicControl::update($panicName, ['status' => true] + $panic);
+            PanicControl::edit($panicName, ['status' => true] + $panic);
         } catch (PanicControlDriverNotSupport $th) {
             $this->error("Panic Control: Driver {$th->context()['store']} does not support update method.");
 

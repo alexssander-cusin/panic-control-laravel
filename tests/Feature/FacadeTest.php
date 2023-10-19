@@ -72,7 +72,7 @@ test('update a Panic Control by facade from panic name', function (string $drive
     try {
         $panic = createPanic(count: 1)[0];
 
-        $newPanic = PanicControl::update($panic['name'], [$key => $value]);
+        $newPanic = PanicControl::edit($panic['name'], [$key => $value]);
 
         expect($newPanic)->toBeArray();
         $this->assertPanicControlMissing($panic);

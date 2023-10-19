@@ -16,7 +16,8 @@ abstract class PanicControlAbstract
     protected function getCacheControl(string $panic = null): array
     {
         $cache = config('panic-control.cache');
-        if (! isset(self::$list[$this->key])) {
+
+        if (empty(self::$list[$this->key])) {
             $cacheStore = $cache['enabled'] ? $cache['store'] : 'array';
 
             self::$list[$this->key] = Cache::store($cacheStore)->remember("{$cache['key']}:{$this->key}", $cache['ttl'], function () {
@@ -97,14 +98,14 @@ abstract class PanicControlAbstract
             throw new Exception('Panic Control: '.implode(', ', $validator->errors()->all()));
         }
 
-        $panic = $this->create($parameters);
+        $panic = $this->store($parameters);
 
         $this->clear();
 
         return $panic;
     }
 
-    public function update(string|int $panic, array $parameters): array
+    public function edit(string|int $panic, array $parameters): array
     {
         $validator = Validator::make($parameters, array_merge_recursive($this->validator($panic), [
             'name' => [

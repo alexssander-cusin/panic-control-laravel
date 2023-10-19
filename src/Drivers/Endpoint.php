@@ -22,12 +22,12 @@ class Endpoint extends PanicControlAbstract
         throw new PanicControlDriverNotSupport('endpoint', 'create');
     }
 
-    public function create(array $parameters): array
+    public function store(array $parameters): array
     {
         throw new PanicControlDriverNotSupport('endpoint', 'create');
     }
 
-    public function update(string|int $panicName, array $parameters): array
+    public function save(string|int $panicName = null, array $parameters): array
     {
         throw new PanicControlDriverNotSupport('endpoint', 'update');
     }

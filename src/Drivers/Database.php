@@ -36,7 +36,7 @@ class Database extends PanicControlAbstract
         ];
     }
 
-    public function create(array $parameters): array
+    public function store(array $parameters): array
     {
         return PanicControl::create($parameters)->toArray();
     }

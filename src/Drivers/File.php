@@ -49,7 +49,7 @@ class File extends PanicControlAbstract
         ];
     }
 
-    public function create(array $parameters): array
+    public function store(array $parameters): array
     {
         try {
             $panics = $this->all();
