@@ -6,3 +6,5 @@ stan:
 
 test: pint
 	composer test
+
+all: pint stan test
