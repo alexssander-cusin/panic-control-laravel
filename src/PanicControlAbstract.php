@@ -134,7 +134,7 @@ abstract class PanicControlAbstract
                 'string',
             ],
             'status' => 'boolean',
-            'rules' => 'array',
+            'rules' => 'nullable|array',
         ]));
 
         if ($validator->fails()) {

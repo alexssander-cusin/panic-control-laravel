@@ -90,6 +90,7 @@ test('update a Panic Control by facade from panic name', function (string $drive
     ['name', 'new name'],
     ['description', 'new description'],
     ['status', true],
+    ['rules', null],
 ]);
 
 test('check status a Panic Control by facade', function (string $driver) {
